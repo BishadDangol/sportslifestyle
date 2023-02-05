@@ -17,6 +17,12 @@ class ProductImageInLine(admin.TabularInline):
     extra = 5
 
 
+# add multiple product Variant same page for admin
+class ProductVariantInLine(admin.TabularInline):
+    model = ProductVariant
+    extra = 5
+
+
 @admin.register(Size)
 class AdminProductImage(admin.ModelAdmin):
     list_display = ['name']
@@ -24,15 +30,15 @@ class AdminProductImage(admin.ModelAdmin):
 
 @admin.register(Product)
 class AdminProduct(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price', 'quantity', 'is_available', 'status', 'image']
-    list_editable = ['price', 'quantity', 'is_available', 'status']
+    list_display = ['name', 'slug', 'price', 'is_available', 'status', 'get_image']
+    list_editable = ['price', 'is_available', 'status']
     prepopulated_fields = {'slug': ('name',)}
     list_per_page = 10
-    inlines = [ProductImageInLine]
-    search_fields = ['name', 'price', 'quantity', 'is_available', 'status']
+    inlines = [ProductImageInLine, ProductVariantInLine]
+    search_fields = ['name', 'price', 'is_available', 'status']
 
     # display product image in admin panel
-    def image(self, obj):
+    def get_image(self, obj):
         if obj.image:
             return format_html(f'<img src="{obj.image.url}" width="50" height="50" />')
         else:

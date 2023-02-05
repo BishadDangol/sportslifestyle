@@ -18,20 +18,32 @@ class Size(models.Model):
 
 
 class Product(models.Model):
+    Variants = (
+        ('None', 'None'),
+        ('Size', 'Size'),
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
     image = models.ImageField(upload_to='photos/products', blank=True, null=True)
     is_available = models.BooleanField(default=True)
-    size = models.ManyToManyField(Size, blank=True, null=True)
+    variants = models.CharField(max_length=100, choices=Variants, default='None')
     discount = models.IntegerField(blank=True, null=True)
     status = models.BooleanField(default=False)
     description = models.TextField(max_length=500, blank=True)
 
     def __str__(self):
         return self.name
+
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.product.name
 
 
 class ProductImage(models.Model):
