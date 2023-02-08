@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {#display title in the browser tab#}
+        {% if title %}
+            {{ title }} - sportslifestyle
+        {% else %}
+            sportslifestyle
+        {% endif %}
+    </title>
+    <link rel="icon" href="{% static 'logo/logo.png' %}">
+    <script src="https://kit.fontawesome.com/a13829d471.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+
+<body>
+    <header class="header">
+
+        <a href="{% url 'index' %}" class="logo"> <img id="logo" src="{% static 'logo/logo.png' %}" alt=""> </a>
+
+        <nav class="navbar">
+            <a href="{% url 'index' %}">Home</a>
+            <a href="shop.html">Shop</a>
+            <a href="#categories">Categories</a>
+            <a href="#review">Offers</a>
+        </nav>
+
+        <div class="icons">
+            <div class="fas fa-bars" id="menu-btn"></div>
+            <div class="fas fa-search" id="search-btn"></div>
+            <div class="fas fa-shopping-cart" id="cart-btn"></div>
+            <div class="fas fa-user" id="login-btn"></div>
+        </div>
+
+        <form action="" class="search-form">
+            <input type="search" id="search-box" placeholder="search here...">
+            <label for="search-box" class="fas fa-search"></label>
+        </form>
+
+
+
+    </header>
+

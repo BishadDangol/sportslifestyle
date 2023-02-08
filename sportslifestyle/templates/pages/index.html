@@ -1,0 +1,60 @@
+{% extends 'main/main.html' %}
+{% block content %}
+
+    <section id="hero">
+        <h4>Best Products</h4>
+        <h2>Super Value Price</h2>
+        <h1>On All Products</h1>
+        <p>Save money and buy the best</p>
+        <button>Show Now</button>
+    </section>
+
+    <section id="feature" class="section-p1">
+        <div class="fe-box">
+            <img src="img/features/f1.png" alt="none">
+            <h6>Online Payment</h6>
+        </div>
+
+        <div class="fe-box">
+            <img src="img/features/f2.png" alt="none">
+            <h6>Free Shipping</h6>
+        </div>
+
+        <div class="fe-box">
+            <img src="img/features/f3.png" alt="none">
+            <h6>Special Deals</h6>
+        </div>
+
+        <div class="fe-box">
+            <img src="img/features/f4.png" alt="none">
+            <h6>Free Shipping</h6>
+        </div>
+
+    </section>
+
+    <section id="products" class="my-5 pb-5">
+        <div class="container text-center  py-5">
+            <h2>Our Products</h2>
+        </div>
+        <div class="row mx-auto  container-fluid">
+{#        display only 8 products#}
+        {% for product in productData|slice:":8" %}
+            <div  class="product text-center col-lg-3 col-md-4 col-12">
+{#            show if image is present #}
+            {% if product.image %}
+                <img onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="img-fluid mb-3 pro-img" src="{{ product.image.url }}" alt="">
+            {% endif %}
+            <div class="desc">
+                <h5>{{ product.name }}</h5>
+                <h4>Rs.{{ product.price }}</h4>
+                <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+            </div>
+        </div>
+        {% endfor %}
+
+
+        </div>
+
+    </section>
+
+{% endblock %}

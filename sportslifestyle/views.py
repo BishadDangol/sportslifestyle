@@ -1,16 +1,18 @@
 from django.shortcuts import render
+from .models import *
 
 
 # Create your views here.
 
 def index(request):
-   data = {
-      'name': 'sonam'
-   }
-   return render(request, 'index.html', data)
+    data = {
+        'productData': Product.objects.all()
+    }
+    return render(request, 'pages/index.html', data)
 
-def about(request):
-   return render(request, 'about.html')
 
-def contact(request):
-   return render(request, 'contact.html')
+def product_detail(request, slug):
+    data = {
+        'productData': Product.objects.get(slug=slug)
+    }
+    return render(request, 'pages/product-detail.html', data)
