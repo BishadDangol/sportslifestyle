@@ -6,12 +6,15 @@
         </div>
         <div class="row mt-5">
             <div class="col-lg-5 col-md-12 col-12">
+                {#checking if product has image#}
                 {% if productData.image %}
                     <img class="img-fluid w-100 " src="{{ productData.image.url }}" alt="">
                 {% endif %}
                 <div class="small-img-group">
+                    {#extracting images from product image model#}
                     {% for proSmimage in productData.productimage_set.all %}
                         <div class="small-img-col">
+                            {#checking if product has multiple images#}
                             {% if proSmimage.image %}
                                 <img class="small-img" width="100%" src="{{ proSmimage.image.url }}" alt="">
                             {% endif %}

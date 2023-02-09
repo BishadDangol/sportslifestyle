@@ -9,9 +9,9 @@
     <title>
         {#display title in the browser tab#}
         {% if title %}
-            {{ title }} - sportslifestyle
+            {{ title }} - Sportslifestyle
         {% else %}
-            sportslifestyle
+            Sportslifestyle
         {% endif %}
     </title>
     <link rel="icon" href="{% static 'logo/logo.png' %}">
@@ -27,7 +27,7 @@
 
         <nav class="navbar">
             <a href="{% url 'index' %}">Home</a>
-            <a href="shop.html">Shop</a>
+            <a href="{% url 'shop' %}">Shop</a>
             <a href="#categories">Categories</a>
             <a href="#review">Offers</a>
         </nav>
@@ -39,8 +39,9 @@
             <div class="fas fa-user" id="login-btn"></div>
         </div>
 
-        <form action="" class="search-form">
-            <input type="search" id="search-box" placeholder="search here...">
+        <form action="{% url 'search' %}" method="post" class="search-form">
+            {% csrf_token %}
+            <input type="search" name="search" id="search-box" placeholder="search here...">
             <label for="search-box" class="fas fa-search"></label>
         </form>
 
