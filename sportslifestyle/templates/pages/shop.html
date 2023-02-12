@@ -12,7 +12,9 @@
             {% for products in productData %}
                 <div class="product text-center col-lg-3 col-md-4 col-12">
                     {% if products.image %}
-                        <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                        <a href="{% url 'product-detail' products.slug %}">
+                            <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                        </a>
                     {% endif %}
                     <div class="desc">
                         <h5>{{ products.name }}</h5>

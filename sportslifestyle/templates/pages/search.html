@@ -1,0 +1,68 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <section id="products" class="my-5 py-5">
+        <div class="container text-center mt-5 py-5">
+            <h2>Search results for {{ result }}</h2>
+        </div>
+
+
+        <div class="row mx-auto  container-fluid">
+
+
+            {% for products in productData %}
+                <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if products.image %}
+                        <img  class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                    {% endif %}
+                    <div class="desc">
+                        <h5>{{ products.name }}</h5>
+                        <h4>Rs.{{ products.price }}</h4>
+                        <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+        {% if productData > 0 %}
+            <nav aria-label="...">
+                <ul class="pagination pagination-lg">
+                    {# checking if previous page is present #}
+                    {% if productData.has_previous %}
+                        <li class="page-item ">
+                            <a class="page-link" href="?page={{ productData.previous_page_number }}"
+                               tabindex="-1">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {# creating loop to iterate over number of pages #}
+                    {% for page_number in productData.paginator.page_range %} {# page_range tot pages [1,2,3] #}
+                        {# finding the current page#}
+                        {% if productData.number == page_number %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{ page_number }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>
+                            </li>
+
+                        {% endif %}
+                    {% endfor %}
+
+                    {# checking if next page is present #}
+                    {% if productData.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ productData.has_next }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            else:
+            <p>opps</p>
+
+        {% endif %}
+    </section>
+
+{% endblock %}

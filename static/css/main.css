@@ -279,7 +279,7 @@ p {
 }
 
 .product .buy-btn{
-    background: #2f6bda;
+    /*background: #2f6bda;*/
     transform: translateY(20px);
     opacity:0;
     transition: 0.3s all;

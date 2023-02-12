@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -22,6 +23,7 @@ def shop(request):
         'productData': page_obj,
         'title': 'Shop',
     }
+    # return HttpResponse(page_obj)
     return render(request, 'pages/shop.html', data)
 
 
@@ -38,10 +40,23 @@ def search(request):
         page_obj = paginator.get_page(page_number)
         data = {
             'productData': page_obj,
+            'result': keyword,
         }
         return render(request, 'pages/shop.html', data)
     else:
+
         return redirect('index')
+
+
+def sort_category(request, slug):
+    product_list = Product.objects.filter(category__slug=slug)  # icontains checks case-sensitive
+    paginator = Paginator(product_list, 5)  # Show 5 products per page.
+    page_number = request.GET.get('page')  # get number of page
+    page_obj = paginator.get_page(page_number)
+    data = {
+        'productData': page_obj,
+    }
+    return render(request, 'pages/shop.html', data)
 
 
 def product_detail(request, slug):
