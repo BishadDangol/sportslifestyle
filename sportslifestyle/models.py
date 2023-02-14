@@ -1,7 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    contact = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=100, blank=True, null=True)
+    image = models.ImageField(upload_to='photos/customers', blank=True, null=True)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -52,17 +61,6 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
-
-
-class User(models.Model):
-    first_name = models.CharField(default='', max_length=50, blank=True)
-    last_name = models.CharField(default='', max_length=100, blank=True)
-    email = models.EmailField(max_length=100, blank=True, null=True)
-    date_of_birth = models.DateField(max_length=12, blank=True, null=True)
-    avatar = models.ImageField(blank=True, upload_to='avatar')
-
-    def __str__(self):
-        return self.first_name
 
 
 class Order(models.Model):

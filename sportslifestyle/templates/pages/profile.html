@@ -1,0 +1,13 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <section id="products" class="my-5 py-5">
+    <div class="container text-center mt-5 py-5">
+        <h2>PROFILE</h2>
+    </div>
+    </section>
+
+    <a href="{% url 'logout' %}">
+    <button type="button" class="btn btn-primary buy-btn">Logout</button>
+    </a>
+
+{% endblock %}
