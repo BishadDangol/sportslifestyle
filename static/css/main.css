@@ -16,7 +16,6 @@
     box-sizing: border-box;
     outline: none;
     border: none;
-    text-decoration: none;
     transition: all .2s linear;
 }
 
@@ -286,6 +285,20 @@ p {
 .product:hover .buy-btn{
     transform: translateY(0px);
     opacity:1;
+}
+
+.bottom-btn{
+    text-align: center;
+    color: #1b1e21;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: large;
+}
+
+.bottom-btn:hover{
+    text-align: center;
+    color:var(--orange) ;
+    text-decoration: none;
 }
 
 .footer {

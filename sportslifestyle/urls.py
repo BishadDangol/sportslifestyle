@@ -5,8 +5,10 @@ urlpatterns = [
     path("", views.index, name='index'),
     path("shop", views.shop, name='shop'),
     path('product-detail/<slug>', views.product_detail, name='product-detail'),
+    path("new-arrivals", views.new_arrivals, name='new-arrivals'),
     path("search", views.search, name='search'),
     path('category/<slug>', views.sort_category, name='category'),
+
     path("register", views.user_register, name='register'),
     path("login", views.user_login, name='login'),
     path("logout", views.user_logout, name='logout'),

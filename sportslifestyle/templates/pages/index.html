@@ -54,7 +54,75 @@
 
         </div>
 
-        <p style="text-align: center">view more</p>
+        <a href="{% url 'new-arrivals' %}">
+            <p class="bottom-btn">View more</p>
+        </a>
+
+
+    </section>
+
+    <section id="products" class="my-5 pb-5">
+        <div class="container text-center  py-5">
+            <h2>Best Clothing</h2>
+        </div>
+        <div class="row mx-auto  container-fluid">
+            {% for product in clothingData|slice:":8" %} {#display only 8 products#}
+                <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {# show if image is present #}
+                    {% if product.image %}
+                        <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
+                             class="img-fluid mb-3 pro-img" src="{{ product.image.url }}" alt="">
+                    {% endif %}
+                    <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
+                        <h5>{{ product.name }}</h5>
+                        <h4>Rs.{{ product.price }}</h4>
+                    </div>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        {% for category in categoryData %}
+            {% if category.slug == 'clothing' %}
+                <a href="{% url 'category' category.slug %}">
+                    <p class="bottom-btn">View more</p>
+                </a>
+            {% endif %}
+        {% endfor %}
+
+
+    </section>
+
+    <section id="products" class="my-5 pb-5">
+        <div class="container text-center  py-5">
+            <h2>Amazing Sneakers</h2>
+        </div>
+        <div class="row mx-auto  container-fluid">
+            {% for product in shoeData|slice:":8" %} {#display only 8 products#}
+                <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {# show if image is present #}
+                    {% if product.image %}
+                        <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
+                             class="img-fluid mb-3 pro-img" src="{{ product.image.url }}" alt="">
+                    {% endif %}
+                    <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
+                        <h5>{{ product.name }}</h5>
+                        <h4>Rs.{{ product.price }}</h4>
+                    </div>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        {% for category in categoryData %}
+            {% if category.slug == 'shoes' %}
+                <a href="{% url 'category' category.slug %}">
+                    <p class="bottom-btn">View more</p>
+                </a>
+            {% endif %}
+        {% endfor %}
 
 
     </section>

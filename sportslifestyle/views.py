@@ -58,13 +58,27 @@ def user_logout(request):
 
 def index(request):
     data = {
-        'productData': Product.objects.order_by('-id')  # for displaying product by recently added
+        'productData': Product.objects.order_by('-id'),  # for displaying product by recently added
+        'clothingData': Product.objects.filter(category__slug='clothing').order_by('-id'),  # display by clothing
+        'shoeData': Product.objects.filter(category__slug='shoes').order_by('-id'),  # display by shoes
     }
     return render(request, 'pages/index.html', data)
 
 
+def new_arrivals(request):
+    product_list = Product.objects.order_by('-id')  # for displaying product by recently added
+    paginator = Paginator(product_list, 5)  # Show 5 products per page.
+    page_number = request.GET.get('page')  # get number of page
+    page_obj = paginator.get_page(page_number)
+    data = {
+        'productData': page_obj,
+        'title': 'Latest',
+    }
+    return render(request, 'pages/latest.html', data)
+
+
 def shop(request):
-    product_list = Product.objects.all()
+    product_list = Product.objects.order_by('-id')
     paginator = Paginator(product_list, 5)  # Show 5 products per page.
     page_number = request.GET.get('page')  # get number of page
     page_obj = paginator.get_page(page_number)
@@ -98,7 +112,7 @@ def search(request):
 
 
 def sort_category(request, slug):
-    product_list = Product.objects.filter(category__slug=slug)
+    product_list = Product.objects.filter(category__slug=slug).order_by('-id')
     paginator = Paginator(product_list, 5)  # Show 5 products per page.
     page_number = request.GET.get('page')  # get number of page
     page_obj = paginator.get_page(page_number)
