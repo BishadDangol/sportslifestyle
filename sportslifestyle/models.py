@@ -10,6 +10,9 @@ class Customer(models.Model):
     email = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to='photos/customers', blank=True, null=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -120,3 +123,18 @@ class Newsletter(models.Model):
 
     def __str__(self):
         return self.news_desc
+
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    total = models.PositiveIntegerField(default=0)
+
+
+class CartDetail(models.Model):
+    unique_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=0)
+    total = models.PositiveIntegerField(default=0)
+    variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
+    sub_total = models.PositiveIntegerField(default=0)
+

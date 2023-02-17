@@ -1,0 +1,72 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <section class="pt-5 mt-5 container">
+        <div class="cart-title container text-left mt-5 pt-5 ">
+            <h2 class" font-weight-bold pt-5">My Cart</h2>
+        </div>
+    </section>
+
+    <section id="cart-container" class="container my-5">
+        <table width="100%">
+            <thead>
+            <tr>
+                <td>Remove</td>
+                <td>Image</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Quantity</td>
+                <td>Total</td>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for cart in cartData %}
+                <tr>
+                    <td><a href="#"><i class="fas fa-trash-alt"></i></a></td>
+                    <td>
+                        {% if cart.product.image %}
+                            <img class="img-fluid mb-3 mt-3" src="{{ cart.product.image.url }}" alt="">
+                        {% endif %}
+                    </td>
+                    <td><h5>{{ cart.product.name }}</h5></td>
+                    <td><h5>{{ cart.product.price }}</h5></td>
+                    <td><input class="w-25 pl-1 number" type="number" value="{{ cart.quantity }}"></td>
+                    <td><h5>Rs.{{ cart.total }}</h5></td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+
+    <section id="cart-bottom" class="container">
+        <div class="col total cart-div  col-lg-6 col-md-6 col-12">
+            <div>
+                <h5>Cart-Total</h5>
+                <div class="d-flex justify-content-between">
+                    <h6>Sub-Total</h6>
+                    <p>Rs.5000</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h6>Shipping</h6>
+                    <p>Rs.5000</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h6>Discount</h6>
+                    <p>Rs.5000</p>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h6>Tax</h6>
+                    <p>Rs.5000</p>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <h6>Total</h6>
+                    <p>Rs.5000</p>
+                </div>
+                <button type="button" class="btn btn-primary ml-auto">Checkout</button>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

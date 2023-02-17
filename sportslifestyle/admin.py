@@ -51,5 +51,15 @@ class AdminProductImage(admin.ModelAdmin):
     list_per_page = 20
 
 
+@admin.register(Cart)
+class AdminCart(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CartDetail)
+class AdminUniqueCart(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Return)
 admin.site.register(Newsletter)

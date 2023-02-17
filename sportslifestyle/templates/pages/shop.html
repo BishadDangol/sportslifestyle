@@ -19,7 +19,7 @@
                     <div class="desc">
                         <h5>{{ products.name }}</h5>
                         <h4>Rs.{{ products.price }}</h4>
-                        <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                       <a href="{% url 'add-to-cart' products.id %}" type="button" class="btn btn-primary buy-btn">Add to Cart</a>
                     </div>
                 </div>
             {% endfor %}
@@ -55,7 +55,7 @@
                 {# checking if next page is present #}
                 {% if productData.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ productData.has_next }}">Next</a>
+                        <a class="page-link" href="?page={{ productData.next_page_number }}" tabindex="+1">Next</a>
                     </li>
                 {% endif %}
             </ul>

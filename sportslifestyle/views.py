@@ -131,3 +131,69 @@ def product_detail(request, slug):
 
 def profile(request):
     return render(request, 'pages/profile.html')
+
+
+def add_to_cart(request, id):
+    get_product = Product.objects.get(id=id)
+    cart_session_key = request.session.get('cart_unique_key', None)
+    # if session key exist
+    if cart_session_key:
+        unique_key = Cart.objects.get(id=cart_session_key)
+        try:
+            # if product already exists in cart
+            cartproduct = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
+            cartproduct.quantity = cartproduct.quantity + 1
+            cartproduct.total = cartproduct.sub_total * cartproduct.quantity
+            cartproduct.save()
+            unique_key.total = unique_key.total + get_product.price
+            unique_key.save()
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+
+        # new product when added in cart
+        except CartDetail.DoesNotExist:
+            cartproduct = CartDetail.objects.create(
+                unique_cart=unique_key,
+                product=get_product,
+                quantity=1,
+                total=get_product.price,
+                sub_total=get_product.price)
+            cartproduct.save()
+            unique_key.total = unique_key.total + get_product.price
+            unique_key.save()
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+
+    # creates a new session key
+    else:
+        unique_key = Cart.objects.create(total=0)
+        request.session['cart_unique_key'] = unique_key.id
+        cartproduct = CartDetail.objects.create(
+            unique_cart=unique_key,
+            product=get_product,
+            quantity=1,
+            total=get_product.price,
+            sub_total=get_product.price)
+        cartproduct.save()
+        unique_key.total = unique_key.total + get_product.price
+        unique_key.save()
+        back = request.META.get('HTTP_REFERER')
+        return redirect(back)
+
+
+def cart_view(request):
+    # check if user has session key
+    cart_session_key = request.session.get('cart_unique_key', None)
+    # if user has session key and products present
+    if cart_session_key:
+        # finds cart owner with relation to session key
+        unique_key = Cart.objects.get(id=cart_session_key)
+        data = {
+            # filters each product in CartDetail related to single Cart model
+            'cartData': CartDetail.objects.filter(unique_cart=unique_key),
+            'uniqueKey': unique_key
+        }
+        return render(request, 'pages/cart.html', data)
+    # if user has no session key empty cart
+    else:
+        return render(request, 'pages/cart.html')
