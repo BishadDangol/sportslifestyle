@@ -197,3 +197,17 @@ def cart_view(request):
     # if user has no session key empty cart
     else:
         return render(request, 'pages/cart.html')
+
+
+def remove_from_cart(request, id):
+    # Retrieve the CartDetail object with the specified ID
+    cart_product_object = CartDetail.objects.get(id=id)
+    # Retrieve the Cart object associated with the CartDetail object
+    cart = cart_product_object.unique_cart
+    cart.total -= cart_product_object.sub_total
+    cart.save()
+    # Delete the CartDetail object from the database
+    cart_product_object.delete()
+    messages.success(request, "Items successfully deleted from cart")
+    return redirect(request.META.get('HTTP_REFERER'))
+

@@ -2,11 +2,20 @@
 {% block content %}
     <section class="pt-5 mt-5 container">
         <div class="cart-title container text-left mt-5 pt-5 ">
-            <h2 class" font-weight-bold pt-5">My Cart</h2>
+            <h2 class=" font-weight-bold pt-5">My Cart</h2>
         </div>
     </section>
 
-    <section id="cart-container" class="container my-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <section id="cart-container" class="container my-3">
         <table width="100%">
             <thead>
             <tr>
@@ -22,7 +31,7 @@
             <tbody>
             {% for cart in cartData %}
                 <tr>
-                    <td><a href="#"><i class="fas fa-trash-alt"></i></a></td>
+                    <td><a href="{% url 'remove-from-cart' cart.id %}"><i class="fas fa-trash-alt"></i></a></td>
                     <td>
                         {% if cart.product.image %}
                             <img class="img-fluid mb-3 mt-3" src="{{ cart.product.image.url }}" alt="">
