@@ -79,7 +79,6 @@ p {
 }
 
 .btn {
-    margin-top: 1rem;
     display: inline-block;
     padding: .8rem 3rem;
     font-size: 1.7rem;
@@ -544,6 +543,10 @@ p {
 
 
 /* CART PAGE */
+.cart-btn{
+    font-size: 19px;
+    padding: 0px 10px;
+}
 
 #cart-container{
     overflow-x: auto;
@@ -575,7 +578,7 @@ p {
 
 #cart-container table td .number{
     font-size: 16px;
-    border-style:ridge;
+    text-align: center;
 }
 
 #cart-container table td:nth-child(1) {

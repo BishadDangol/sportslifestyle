@@ -6,16 +6,18 @@
         </div>
     </section>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-success">
-                {{ message }}
-
-            </div>
-        {% endfor %}
-    {% endif %}
 
     <section id="cart-container" class="container my-3">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <table width="100%">
             <thead>
             <tr>
@@ -39,7 +41,15 @@
                     </td>
                     <td><h5>{{ cart.product.name }}</h5></td>
                     <td><h5>{{ cart.product.price }}</h5></td>
-                    <td><input class="w-25 pl-1 number" type="number" value="{{ cart.quantity }}"></td>
+                    <td>
+                        <a href="{% url 'increase-from-cart' cart.id %}">
+                            <button class="cart-btn btn">+</button>
+                        </a>
+                        <input class="w-25 pl-1 number" type="number" value="{{ cart.quantity }}">
+                        <a href="{% url 'decrease-from-cart' cart.id%}">
+                            <button class="cart-btn btn">-</button>
+                        </a>
+                    </td>
                     <td><h5>Rs.{{ cart.total }}</h5></td>
                 </tr>
             {% endfor %}

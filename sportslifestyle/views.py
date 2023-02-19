@@ -211,3 +211,53 @@ def remove_from_cart(request, id):
     messages.success(request, "Items successfully deleted from cart")
     return redirect(request.META.get('HTTP_REFERER'))
 
+
+def increase_cart(request, id):
+    cart_product = CartDetail.objects.get(id=id)
+    cart = cart_product.unique_cart
+    cart.total += cart_product.sub_total
+    cart.save()
+    cart_product.quantity += 1
+    cart_product.total = cart_product.sub_total * cart_product.quantity
+    cart_product.save()
+    messages.success(request, "Cart was successfully updated")
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+# def decrease_cart(request, id):
+#     cart_product = CartDetail.objects.get(id=id)
+#     cart = cart_product.unique_cart
+#     cart.total -= cart_product.sub_total
+#     cart.save()
+#     if cart_product.quantity > 1:
+#         cart_product.quantity -= 1
+#         cart_product.total = cart_product.sub_total * cart_product.quantity
+#         cart_product.save()
+#
+#         # Update the corresponding Cart object's total
+#         cart_details = cart.cartdetail_set.all()
+#         cart.total = sum(detail.total for detail in cart_details)
+#         cart.save()
+#     messages.success(request, "Cart was successfully updated")
+#     return redirect(request.META.get('HTTP_REFERER'))
+
+def decrease_cart(request, id):
+    cart_product = CartDetail.objects.get(id=id)
+    cart = cart_product.unique_cart
+    cart.total -= cart_product.sub_total
+    cart.save()
+    if cart_product.quantity > 1:
+        cart_product.quantity -= 1
+        cart_product.total = cart_product.sub_total * cart_product.quantity
+        cart_product.save()
+    else:
+        cart_product.delete()  # Remove the cart detail if the quantity is 1 or less
+
+    # Update the corresponding Cart object's total and cart details count
+    cart_details = cart.cartdetail_set.all()
+    cart.total = sum(detail.total for detail in cart_details)
+    cart.cart_details_count = len(cart_details)
+    cart.save()
+
+    messages.success(request, "Cart was successfully updated")
+    return redirect(request.META.get('HTTP_REFERER'))
