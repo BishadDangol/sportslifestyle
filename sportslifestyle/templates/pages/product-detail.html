@@ -2,7 +2,14 @@
 {% block content %}
     <section class="container sproduct my-5 pt-5">
         <div class="container text-left mt-5 py-3">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success mt-2">
+                        {{ message }}
 
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="row mt-5">
             <div class="col-lg-5 col-md-12 col-12">
@@ -26,14 +33,19 @@
             <div class="col-lg-6 col-md-12 col-12">
                 <h3 class="py-4">{{ productData.name }} </h3>
                 <h2>Rs.{{ productData.price }} </h2>
-                <select class="size">
-                    <option>Select Size</option>
-                    <option>S</option>
-                    <option>M</option>
-                    <option>L</option>
-                </select>
-                <input type="number" value="1">
-                <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                <form action="{% url 'add-to-cart' productData.id %}" method="post">
+                    {% csrf_token %}
+                    <select class="size" name="variant" required>
+                        <option value="">Select Size</option>
+
+                        {% for vs in productData.productvariant_set.all %}
+                            <option value={{ vs.id }}>{{ vs.size.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button class="btn btn-primary buy-btn">Add to Cart</button>
+                </form>
                 <h4 class="mt-5 mb-4">Product Detail</h4>
                 <span>{{ productData.description }}
                 </span>

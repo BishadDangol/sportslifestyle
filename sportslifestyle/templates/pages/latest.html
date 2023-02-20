@@ -28,7 +28,7 @@
 
         </div>
 
-        <nav aria-label="...">
+        <nav aria-label="..." class="d-flex justify-content-center">
             <ul class="pagination pagination-lg">
                 {# checking if previous page is present #}
                 {% if productData.has_previous %}
@@ -56,7 +56,7 @@
                 {# checking if next page is present #}
                 {% if productData.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ productData.has_next }}">Next</a>
+                        <a class="page-link" href="?page={{ productData.next_page_number }}">Next</a>
                     </li>
                 {% endif %}
             </ul>

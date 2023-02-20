@@ -136,6 +136,61 @@ def profile(request):
 def add_to_cart(request, id):
     get_product = Product.objects.get(id=id)
     cart_session_key = request.session.get('cart_unique_key', None)
+    # if form is used to add to cart
+    if request.method == "POST":
+        quantity = request.POST.get('quantity')
+        get_v = request.POST.get('variant')
+        variant = ProductVariant.objects.get(id=get_v)
+        if variant.quantity < int(quantity):
+            messages.error(request, 'Sorry! We have only ' + str(variant.quantity) + ' Products in left')
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+
+        else:
+            # if session key exist
+            if cart_session_key:
+                unique_key = Cart.objects.get(id=cart_session_key)
+                try:
+                    # if product already exists in cart
+                    cart_product = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
+                    cart_product.quantity = cart_product.quantity + int(quantity)
+                    cart_product.total = cart_product.sub_total * cart_product.quantity
+                    cart_product.save()
+                    unique_key.total = unique_key.total + (get_product.price * int(quantity))
+                    unique_key.save()
+                    back = request.META.get('HTTP_REFERER')
+                    return redirect(back)
+                except CartDetail.DoesNotExist:
+                    # new product added in the cart
+                    cart_product = CartDetail.objects.create(
+                        unique_cart=unique_key,
+                        product=get_product,
+                        quantity=quantity,
+                        total=get_product.price * int(quantity),
+                        sub_total=get_product.price,
+                        variant=variant)
+                    cart_product.save()
+                    unique_key.total = unique_key.total + (get_product.price * int(quantity))
+                    unique_key.save()
+                    back = request.META.get('HTTP_REFERER')
+                    return redirect(back)
+            else:
+                # creates a new session key
+                unique_key = Cart.objects.create()
+                request.session['cart_unique_key'] = unique_key.id
+                cart_product = CartDetail.objects.create(
+                    unique_cart=unique_key,
+                    product=get_product,
+                    quantity=quantity,
+                    total=get_product.price * int(quantity),
+                    sub_total=get_product.price,
+                    variant=variant)
+                cart_product.save()
+                unique_key.total = unique_key.total + (get_product.price * int(quantity))
+                unique_key.save()
+                back = request.META.get('HTTP_REFERER')
+                return redirect(back)
+
     # if session key exist
     if cart_session_key:
         unique_key = Cart.objects.get(id=cart_session_key)
@@ -206,8 +261,17 @@ def remove_from_cart(request, id):
     cart = cart_product_object.unique_cart
     cart.total -= cart_product_object.sub_total
     cart.save()
-    # Delete the CartDetail object from the database
+
+    # Remove the CartDetail object from the database
     cart_product_object.delete()
+
+    # Loop over all the CartDetail objects in the cart and calculate the new total
+    new_total = 0
+    for item in cart.cartdetail_set.all():
+        new_total += item.sub_total
+    cart.total = new_total
+    cart.save()
+
     messages.success(request, "Items successfully deleted from cart")
     return redirect(request.META.get('HTTP_REFERER'))
 
@@ -252,12 +316,6 @@ def decrease_cart(request, id):
         cart_product.save()
     else:
         cart_product.delete()  # Remove the cart detail if the quantity is 1 or less
-
-    # Update the corresponding Cart object's total and cart details count
-    cart_details = cart.cartdetail_set.all()
-    cart.total = sum(detail.total for detail in cart_details)
-    cart.cart_details_count = len(cart_details)
-    cart.save()
 
     messages.success(request, "Cart was successfully updated")
     return redirect(request.META.get('HTTP_REFERER'))
