@@ -61,5 +61,11 @@ class AdminUniqueCart(admin.ModelAdmin):
     pass
 
 
+@admin.register(Order)
+class AdminOrder(admin.ModelAdmin):
+    list_display = ['customer',  'total', 'status']
+    list_editable = ['status']
+
+
 admin.site.register(Return)
 admin.site.register(Newsletter)

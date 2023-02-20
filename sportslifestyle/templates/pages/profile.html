@@ -1,13 +1,135 @@
 {% extends 'main/main.html' %}
 {% block content %}
-    <section id="products" class="my-5 py-5">
-    <div class="container text-center mt-5 py-5">
-        <h2>PROFILE</h2>
-    </div>
+{#    <section id="products" class="my-5 py-5">#}
+{#        <div class="container text-center mt-5 py-5">#}
+{#            <h2>PROFILE</h2>#}
+{#        </div>#}
+{#    </section>#}
+
+
+
+    <section class="container sproduct my-5 pt-5">
+        <div class="container text-left mt-5 py-3">
+
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-5 col-md-12 col-12">
+                <img style="width: 70%; height: 94%; border-radius: 50%;" class="img-fluid ml-5 pb-1"
+                     src="img/products/ww.jpeg" alt="">
+            </div>
+
+            <div class="col-lg-6 col-md-12 col-12">
+
+                <h2>Harrry W2s </h2>
+                <p>harry.w2scanneverbecancelled@gmail.com </p>
+                <button type="button" class="btn btn-primary buy-btn mr-4">Edit Profile</button>
+                <a href="{% url 'logout' %}">
+                    <button type="button" class="btn btn-primary buy-btn">Logout</button>
+                </a>
+
+            </div>
+
+        </div>
+
+
     </section>
 
-    <a href="{% url 'logout' %}">
-    <button type="button" class="btn btn-primary buy-btn">Logout</button>
-    </a>
+    <section class="recent-comment">
+        <div class="container ">
+            <div class="row">
+                <div class="container mt-5">
+                    <h4>My Orders</h4>
+                </div>
+                <section id="cart-container" class="container ">
+                    <table width="100%">
+                        <thead>
+                        <tr>
+                            <td><h3>Order ID</h3></td>
+                            <td><h3>Name</h3></td>
+                            <td><h3>Address</h3></td>
+                            <td><h3>Contact</h3></td>
+                            <td><h3>Order Status</h3></td>
+                            <td><h3>Details</h3></td>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr class="pt-5 pb-3">
+                            <td><h3>10</h3></td>
+                            <td><h3>Harry W2s</h3></td>
+                            <td><h3>England</h3></td>
+                            <td><h3>982105000</h3></td>
+                            <td><h3>shipping</h3></td>
+                            <td><a href="#"><h3>View</h3></a></td>
+                        </tr>
+                        <tr>
+                            <td><h3>10</h3></td>
+                            <td><h3>Harry W2s</h3></td>
+                            <td><h3>England</h3></td>
+                            <td><h3>982105000</h3></td>
+                            <td><h3>shipping</h3></td>
+                            <td><a href="#"><h3>View</h3></a></td>
+                        </tr>
+                        <tr>
+                            <td><h3>10</h3></td>
+                            <td><h3>Harry W2s</h3></td>
+                            <td><h3>England</h3></td>
+                            <td><h3>982105000</h3></td>
+                            <td><h3>shipping</h3></td>
+                            <td><a href="#"><h3>View</h3></a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="products" class="my-5 pb-5">
+        <div class="container text-center  py-5">
+            <h4 class="text-left">Recommended for you</h4>
+        </div>
+        <div class="row mx-auto  container-fluid">
+
+            <div class="product text-center col-lg-3 col-md-4 col-12">
+                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
+                <div class="desc">
+                    <h5>Printed Shirt</h5>
+                    <h4>Rs.5000</h4>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product text-center col-lg-3 col-md-4 col-12">
+                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
+                <div class="desc">
+                    <h5>Printed Shirt</h5>
+                    <h4>Rs.5000</h4>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product text-center col-lg-3 col-md-4 col-12">
+                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
+                <div class="desc">
+                    <h5>Printed Shirt</h5>
+                    <h4>Rs.5000</h4>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product text-center col-lg-3 col-md-4 col-12">
+                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
+                <div class="desc">
+                    <h5>Printed Shirt</h5>
+                    <h4>Rs.5000</h4>
+                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
 
 {% endblock %}

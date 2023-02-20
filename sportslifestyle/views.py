@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -98,14 +99,14 @@ def search(request):
         # filtering keyword in models
         product_list = Product.objects.filter(
             Q(name__icontains=keyword) | Q(description__icontains=keyword))  # icontains checks case-sensitive
-        paginator = Paginator(product_list, 5)  # Show 5 products per page.
-        page_number = request.GET.get('page')  # get number of page
-        page_obj = paginator.get_page(page_number)
+        # paginator = Paginator(product_list, 5)  # Show 5 products per page.
+        # page_number = request.GET.get('page')  # get number of page
+        # page_obj = paginator.get_page(page_number)
         data = {
-            'productData': page_obj,
+            'productData': product_list,
             'result': keyword,
         }
-        return render(request, 'pages/shop.html', data)
+        return render(request, 'pages/search.html', data)
     else:
 
         return redirect('index')
@@ -319,3 +320,37 @@ def decrease_cart(request, id):
 
     messages.success(request, "Cart was successfully updated")
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required(login_url='login')
+def checkout(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        full_name = first_name + ' ' + last_name
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        phone_optional = request.POST.get('phone_optional')
+        address = request.POST.get('address')
+        address_optional = request.POST.get('address_optional')
+        city = request.POST.get('city')
+        product_unique_cart_id = request.session.get('cart_unique_key')
+        cat_obj = Cart.objects.get(id=product_unique_cart_id)
+        order_object = Order.objects.create(
+            full_name=full_name,
+            email=email,
+            address=address,
+            address_optional=address_optional,
+            phone=phone,
+            optional_phone=phone_optional,
+            city=city,
+            total=cat_obj.total,
+            unique_cart=Cart.objects.get(id=cat_obj.id),
+            customer=Customer.objects.get(user=request.user)
+        )
+        order_object.save()
+        del request.session['cart_unique_key']
+        return redirect('index')
+
+    else:
+        return render(request, 'pages/checkout.html')

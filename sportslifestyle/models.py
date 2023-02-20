@@ -66,28 +66,6 @@ class ProductImage(models.Model):
         return self.product.name
 
 
-class Order(models.Model):
-    STATUS = (
-        ('New', 'New'),
-        ('Accepted', 'Accepted'),
-        ('OnShipping', 'OnShipping'),
-        ('Delivered', 'Delivered'),
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=10)
-    surname = models.CharField(max_length=10)
-    address = models.CharField(max_length=150)
-    city = models.CharField(max_length=20)
-    phone = models.CharField(max_length=20)
-    total = models.FloatField()
-    status = models.CharField(choices=STATUS, default='New', max_length=15)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
 # class Review(models.Model):
 #     RATING_CHOICES = (
 #         (1, '1'),
@@ -138,3 +116,29 @@ class CartDetail(models.Model):
     variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
     sub_total = models.PositiveIntegerField(default=0)
 
+
+class Order(models.Model):
+    order_status = (
+        ("Order Received", "Order Received"),
+        ("Processing", "Processing"),
+        ("On shipping", "On shipping"),
+        ("Completed", "Completed"),
+        ("Order Canceled", "Order Canceled"),
+    )
+
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    unique_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
+    date_ordered = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=100, choices=order_status, default='Order Received')
+    full_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    address_optional = models.CharField(max_length=100, blank=True, null=True)
+    phone = models.CharField(max_length=100, blank=True, null=True)
+    optional_phone = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    transaction_id = models.CharField(max_length=100, null=True)
+    total = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return str(self.id)
