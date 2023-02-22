@@ -354,3 +354,5 @@ def checkout(request):
 
     else:
         return render(request, 'pages/checkout.html')
+
+

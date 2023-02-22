@@ -110,7 +110,7 @@
                         <h5>{{ product.name }}</h5>
                         <h4>Rs.{{ product.price }}</h4>
                     </div>
-                     <a href="{% url 'add-to-cart' product.id %}" type="button" class="btn btn-primary buy-btn">Add to Cart</a>
+                     <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">Add to Cart</a>
                 </div>
             {% endfor %}
 
