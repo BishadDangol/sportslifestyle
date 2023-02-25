@@ -130,10 +130,6 @@ def product_detail(request, slug):
     return render(request, 'pages/product-detail.html', data)
 
 
-def profile(request):
-    return render(request, 'pages/profile.html')
-
-
 def add_to_cart(request, id):
     get_product = Product.objects.get(id=id)
     cart_session_key = request.session.get('cart_unique_key', None)
@@ -249,10 +245,7 @@ def cart_view(request):
             'cartData': CartDetail.objects.filter(unique_cart=unique_key),
             'uniqueKey': unique_key
         }
-        return render(request, 'pages/cart.html', data)
-    # if user has no session key empty cart
-    else:
-        return render(request, 'pages/cart.html')
+    return render(request, 'pages/cart.html', data)
 
 
 def remove_from_cart(request, id):
@@ -356,3 +349,9 @@ def checkout(request):
         return render(request, 'pages/checkout.html')
 
 
+def profile(request):
+    return render(request, 'pages/profile.html')
+
+
+def offer(request):
+    return render(request, 'pages/offer.html')

@@ -30,17 +30,17 @@ class Size(models.Model):
 
 
 class Product(models.Model):
-    Variants = (
-        ('None', 'None'),
-        ('Size', 'Size'),
-    )
+    # Variants = (
+    #     ('None', 'None'),
+    #     ('Size', 'Size'),
+    # )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='photos/products', blank=True, null=True)
     is_available = models.BooleanField(default=True)
-    variants = models.CharField(max_length=100, choices=Variants, default='None')
+    # variants = models.CharField(max_length=100, choices=Variants, default='None')
     discount = models.IntegerField(blank=True, null=True)
     status = models.BooleanField(default=False)
     description = models.TextField(max_length=500, blank=True)

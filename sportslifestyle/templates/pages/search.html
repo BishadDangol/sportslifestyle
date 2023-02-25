@@ -2,7 +2,7 @@
 {% block content %}
     <section id="products" class="my-5 py-5">
         <div class="container text-center mt-5 py-5">
-            <h2>Search results for {{ result }}</h2>
+            <h2>Search results for "{{ result }}"</h2>
         </div>
 
 
@@ -11,11 +11,16 @@
             {% if productData %}
                 {% for products in productData %}
                     <div class="product text-center col-lg-3 col-md-4 col-12">
-                        {% if products.image %}
-                            <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
-                        {% endif %}
+                        <a href="{% url 'product-detail' products.slug %} ">
+                            {% if products.image %}
+                                <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                            {% endif %}
+                        </a>
                         <div class="desc">
                             <h5>{{ products.name }}</h5>
+                            <div class="star">
+                                4.5 <i class="fas fa-star"></i> | (39)
+                            </div>
                             <h4>Rs.{{ products.price }}</h4>
                             <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
                         </div>
@@ -23,7 +28,7 @@
                 {% endfor %}
             {% else %}
                 <section class="justify-content-center ml-5">
-                    <div class="search container-fluid" >
+                    <div class="search container-fluid">
                         <p> No results found for “{{ result }}”. Check the spelling or use a different word or
                             phrase.</p>
                     </div>

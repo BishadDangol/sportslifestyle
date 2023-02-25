@@ -32,6 +32,10 @@
 
             <div class="col-lg-6 col-md-12 col-12">
                 <h3 class="py-4">{{ productData.name }} </h3>
+                <div class="star d-flex flex-row mt-2 mb-4">
+                    <h3>4.5</h3>  <i class="fas fa-star ml-1 mt-1 mr-2"></i>
+                    <h3>(45)</h3>
+                </div>
                 <h2>Rs.{{ productData.price }} </h2>
                 <form action="{% url 'add-to-cart' productData.id %}" method="post">
                     {% csrf_token %}
@@ -69,8 +73,13 @@
                         <div class="comments m-b-20">
 
                             <div class="d-flex flex-row comment-row">
-                                <div class="p-3 ml-2 mr-2"><span><img src="img/products/f1.jpg" alt="user"
-                                                                      width="50"></span></div>
+                                <div class="p-3 ml-2 mr-2">
+                                    <span>
+                                        <div class="star d-flex flex-row">
+                                            4.5 <i class="fas fa-star ml-2 mt-1"></i>
+                                        </div>
+                                    </span>
+                                </div>
                                 <div class="comment-text w-100">
                                     <h5>Samso Nagaro</h5>
                                     <div class="comment-footer">
@@ -86,8 +95,13 @@
                             </div>
 
                             <div class="d-flex flex-row comment-row">
-                                <div class="p-3 ml-2 mr-2"><span><img src="img/products/f1.jpg" alt="user"
-                                                                      width="50"></span></div>
+                                <div class="p-3 ml-2 mr-2">
+                                    <span>
+                                        <div class="star d-flex flex-row">
+                                            4.5 <i class="fas fa-star ml-2 mt-1"></i>
+                                        </div>
+                                    </span>
+                                </div>
                                 <div class="comment-text w-100">
                                     <h5>Samso Nagaro</h5>
                                     <div class="comment-footer">
@@ -103,8 +117,13 @@
                             </div>
 
                             <div class="d-flex flex-row comment-row">
-                                <div class="p-3 ml-2 mr-2"><span><img src="img/products/f1.jpg" alt="user"
-                                                                      width="50"></span></div>
+                                <div class="p-3 ml-2 mr-2">
+                                    <span>
+                                        <div class="star d-flex flex-row">
+                                            4.5 <i class="fas fa-star ml-2 mt-1"></i>
+                                        </div>
+                                    </span>
+                                </div>
                                 <div class="comment-text w-100">
                                     <h5>Samso Nagaro</h5>
                                     <div class="comment-footer">
@@ -155,7 +174,7 @@
                     <div class="comment-btns mt-2">
                         <div class="pull-right mb-3">
 
-                            <button class="btn btn-success send btn-sm">Post <i class="fa fa-long-arrow-right ml-1"></i>
+                            <button class="btn  send btn-sm mt-3">Post <i class="fa fa-long-arrow-right ml-1"></i>
                             </button>
 
                         </div>

@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap');
+
 :root {
     --orange: #2f6bda;
     --black: #130f40;
     --light-color: #666;
     --box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .1);
-    --border: .2rem solid rgba(0, 0, 0, .1);
+    --border: .1rem solid rgba(0, 0, 0, .1);
     --outline: .1rem solid rgba(0, 0, 0, .1);
     --outline-hover: .2rem solid var(--black);
 }
@@ -254,39 +255,83 @@ p {
     font-size: 15px;
 }
 
-.product{
+.product {
     cursor: pointer;
     margin-bottom: 2rem;
 }
 
-.product .pro-img{
+.product .pro-img {
     width: 100%;
     height: 280px;
     box-sizing: border-box;
     object-fit: cover;
 }
 
-.product img{
+.product img {
     transition: 0.3s all;
 }
 
-.product:hover img{
+.product:hover img {
     opacity: 0.7;
 }
 
-.product .buy-btn{
+.product .buy-btn {
     /*background: #2f6bda;*/
     transform: translateY(20px);
-    opacity:0;
+    opacity: 0;
     transition: 0.3s all;
 }
 
-.product:hover .buy-btn{
+.product:hover .buy-btn {
     transform: translateY(0px);
-    opacity:1;
+    opacity: 1;
 }
 
-.bottom-btn{
+.star {
+    font-size: 12px;
+}
+
+.star i {
+    color: rgb(255, 208, 38);
+}
+
+.style-1 del {
+    color: rgba(174, 169, 169, 0.5);
+    text-decoration: none;
+    font-size: 18px;
+    position: relative;
+}
+
+.style-1 del:before {
+    content: " ";
+    display: block;
+    width: 100%;
+    border-top: 1.3px solid rgba(66, 62, 62, 0.8);
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+}
+
+.style-1 ins {
+    color: rgb(0, 0, 0);
+    font-size: 18px;
+    font-weight: bolder;
+    text-decoration: none;
+    padding: 1em 1em 1em 0.5em;
+}
+
+.sale-top {
+    position: absolute;
+    margin-top: 0.2rem;
+    background-color: #000000;
+    color: #c6d5cf;
+    padding: 8px 12px 8px 12px;
+}
+
+
+.bottom-btn {
     text-align: center;
     color: #1b1e21;
     cursor: pointer;
@@ -294,9 +339,9 @@ p {
     font-size: large;
 }
 
-.bottom-btn:hover{
+.bottom-btn:hover {
     text-align: center;
-    color:var(--orange) ;
+    color: var(--orange);
     text-decoration: none;
 }
 
@@ -463,26 +508,24 @@ p {
 }
 
 
-
-
 /* s-product page  */
 
-.small-img-group{
+.small-img-group {
     display: flex;
     justify-content: space-between;
 }
 
-.small-img-col{
+.small-img-col {
     flex-basis: 24%;
     cursor: pointer;
 }
 
-.sproduct select{
+.sproduct select {
     display: block;
     padding: 5px 10px;
 }
 
-.sproduct input{
+.sproduct input {
     width: 50px;
     height: 40px;
     padding-left: 10px;
@@ -491,14 +534,14 @@ p {
     margin-right: 14px;
 }
 
-.sproduct .size{
+.sproduct .size {
     font-size: 16px;
     margin-left: -1rem;
     margin: 23px 0px;
     border-style: solid;
 }
 
-.sproduct input:focus{
+.sproduct input:focus {
     outline: none;
 }
 
@@ -508,115 +551,115 @@ p {
     flex-direction: row-reverse;
     margin-left: -4px;
     float: left;
-        }
+}
 
-.rating>input {
+.rating > input {
     display: none
-        }
+}
 
-.rating>label {
+.rating > label {
     position: relative;
     width: 19px;
     font-size: 25px;
-    color: #1f5485;
+    color: rgb(255, 208, 38);
     cursor: pointer;
-        }
+}
 
-.rating>label::before {
+.rating > label::before {
     content: "\2605";
     position: absolute;
     opacity: 0
-        }
+}
 
-.rating>label:hover:before,
-.rating>label:hover~label:before {
+.rating > label:hover:before,
+.rating > label:hover ~ label:before {
     opacity: 1 !important
-        }
+}
 
-.rating>input:checked~label:before {
+.rating > input:checked ~ label:before {
     opacity: 1
-        }
+}
 
-.rating:hover>input:checked~label:before {
+.rating:hover > input:checked ~ label:before {
     opacity: 0.4
-        }
+}
 
 
 /* CART PAGE */
-.cart-btn{
+.cart-btn {
     font-size: 19px;
     padding: 0px 10px;
 }
 
-#cart-container{
+#cart-container {
     overflow-x: auto;
 }
 
-#cart-container table{
+#cart-container table {
     border-collapse: collapse;
     width: 100%;
     table-layout: fixed;
     white-space: nowrap;
 }
 
-#cart-container table thead{
+#cart-container table thead {
     font-size: 16px;
     font-weight: 720;
 }
 
-#cart-container table thead td{
+#cart-container table thead td {
     background: var(--orange);
     color: #fff;
     border: none;
     padding: 6px 0;
 }
 
-#cart-container table td{
-    border: 1px solid  #c6d5cf;
+#cart-container table td {
+    border: 1px solid #c6d5cf;
     text-align: center;
 }
 
-#cart-container table td .number{
+#cart-container table td .number {
     font-size: 16px;
     text-align: center;
 }
 
 #cart-container table td:nth-child(1) {
-    width:100px;
+    width: 100px;
 }
 
 #cart-container table td:nth-child(2)
 #cart-container table td:nth-child(3) {
-    width:210px;
+    width: 210px;
 }
 
 #cart-container table td:nth-child(4)
 #cart-container table td:nth-child(5)
 #cart-container table td:nth-child(6) {
-    width:172px;
+    width: 172px;
 }
 
-#cart-container table tbody img{
+#cart-container table tbody img {
     width: 100px;
     height: 80px;
     object-fit: cover;
 }
 
-#cart-container table tbody i{
+#cart-container table tbody i {
     font-size: large;
 
 }
 
-#cart-container table tbody i:hover{
+#cart-container table tbody i:hover {
     color: var(--orange);
     transition: 0.2s ease;
 }
 
-#cart-bottom .total>div{
-    border: 1px solid  #c6d5cf;
+#cart-bottom .total > div {
+    border: 1px solid #c6d5cf;
 }
 
-#cart-bottom .total h5{
+#cart-bottom .total h5 {
     background: var(--orange);
     color: #fff;
     border: none;
@@ -624,11 +667,11 @@ p {
     font-weight: 700;
 }
 
-#cart-bottom .total div>div{
+#cart-bottom .total div > div {
     padding: 0 12px;
 }
 
-#cart-bottom .total div>button{
+#cart-bottom .total div > button {
     margin: 0 12px 22px 0;
     display: flex;
     justify-content: flex-end;
@@ -637,25 +680,26 @@ p {
 
 /* media queries  */
 
-@media (max-width:991px) {
+@media (max-width: 991px) {
     html {
         font-size: 55%;
     }
+
     .header {
         padding: 2rem;
     }
+
     section {
         padding: 2rem;
     }
 }
 
 
-
 .login-page {
     width: 360px;
     padding: 8% 0 0;
     margin: auto;
-  }
+}
 
 .form {
     position: relative;
@@ -665,7 +709,7 @@ p {
     margin: 0 auto 100px;
     padding: 45px;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  }
+}
 
 .form input {
     outline: 0;
@@ -675,53 +719,55 @@ p {
     padding: 5px;
     box-sizing: border-box;
     font-size: 14px;
-  }
+}
 
 .form button {
-      padding: .8rem 3rem;
-      font-size: 1.7rem;
-      border-radius: .5rem;
-      border: .2rem solid rgb(52, 52, 152);
-      color: black;
-      cursor: pointer;
-      background: none;
-      -webkit-transition: all 0.3 ease;
-      transition: all 0.3 ease;
+    padding: .8rem 3rem;
+    font-size: 1.7rem;
+    border-radius: .5rem;
+    border: .2rem solid rgb(52, 52, 152);
+    color: black;
+    cursor: pointer;
+    background: none;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
 
-  }
+}
 
 
-.form .top-form{
-      background-color: #2f6bda;
-      width: 47%;
-      margin-bottom: 2rem;
-      color: #fff;
-      margin-right: 5px;
-  }
+.form .top-form {
+    background-color: #2f6bda;
+    width: 47%;
+    margin-bottom: 2rem;
+    color: #fff;
+    margin-right: 5px;
+}
 
-.form .top-form:hover{
-      background-color: #fff;
-      color: #000000;
-  }
+.form .top-form:hover {
+    background-color: #fff;
+    color: #000000;
+}
 
-.form button:hover,.form button:active,.form button:focus {
-      background: #2f6bda;
-      color: #fff;
+.form button:hover, .form button:active, .form button:focus {
+    background: #2f6bda;
+    color: #fff;
 
-  }
+}
 
-.login-btn{
+.login-btn {
     margin-left: 7.2rem;
 }
 
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     #menu-btn {
         display: inline-block;
     }
+
     .header .search-form {
         width: 90%;
     }
+
     .header .navbar {
         position: absolute;
         top: 110%;
@@ -731,39 +777,44 @@ p {
         border-radius: .5rem;
         background: #fff;
     }
+
     .header .navbar.active {
         right: 2rem;
         transition: .4s linear;
     }
+
     .header .navbar a {
         font-size: 2rem;
         margin: 2rem 2.5rem;
         display: block;
     }
 
-    #section-p1{
+    #section-p1 {
         padding: 40px 40px;
     }
 
-    #feature{
+    #feature {
         justify-content: center;
     }
 
-    #feature .fe-box{
+    #feature .fe-box {
         margin: 15px 15px;
     }
 }
 
-@media (max-width:450px) {
+@media (max-width: 450px) {
     html {
         font-size: 50%;
     }
+
     .heading {
         font-size: 2.5rem;
     }
+
     .footer {
         text-align: center;
     }
+
     .footer .box-container .box .payment-img {
         margin: 2rem auto;
     }
