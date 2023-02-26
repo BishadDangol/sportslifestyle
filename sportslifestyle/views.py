@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.core.paginator import Paginator
+from django.urls import reverse
 from django.db.models import Q
 from .forms import CustomerForm
 from django.contrib.auth.models import User
@@ -79,13 +80,29 @@ def new_arrivals(request):
 
 
 def shop(request):
-    product_list = Product.objects.order_by('-id')
+    sort_order = request.GET.get('sort', '-id')  # Get the sort order from the query string
+    product_list = Product.objects.all().order_by(sort_order)
+
     paginator = Paginator(product_list, 5)  # Show 5 products per page.
     page_number = request.GET.get('page')  # get number of page
     page_obj = paginator.get_page(page_number)
+    page_obj.sort_order = sort_order  # add sort_order to page_obj
+    # Construct the filter option links with the current sort order
+    filter_links = [
+        ('Default', f"{reverse('shop')}?sort=-id"),
+        ('Price (High to Low)', f"{reverse('shop')}?sort=-price"),
+        ('Price (Low to High)', f"{reverse('shop')}?sort=price"),
+        ('Date Added (New to Old)', f"{reverse('shop')}?sort=-id"),
+        ('Date Added (Old to New)', f"{reverse('shop')}?sort=id")
+    ]
+    for i, link in enumerate(filter_links):
+        filter_links[i] = (link[0], f"{link[1]}&page={page_number}" if page_number else link[1])
+
     data = {
         'productData': page_obj,
         'title': 'Shop',
+        'sortOrder': sort_order,
+        'filterLinks': filter_links,
     }
     # return HttpResponse(page_obj)
     return render(request, 'pages/shop.html', data)
@@ -189,48 +206,48 @@ def add_to_cart(request, id):
                 return redirect(back)
 
     # if session key exist
-    if cart_session_key:
-        unique_key = Cart.objects.get(id=cart_session_key)
-        try:
-            # if product already exists in cart
-            cartproduct = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
-            cartproduct.quantity = cartproduct.quantity + 1
-            cartproduct.total = cartproduct.sub_total * cartproduct.quantity
-            cartproduct.save()
-            unique_key.total = unique_key.total + get_product.price
-            unique_key.save()
-            back = request.META.get('HTTP_REFERER')
-            return redirect(back)
-
-        # new product when added in cart
-        except CartDetail.DoesNotExist:
-            cartproduct = CartDetail.objects.create(
-                unique_cart=unique_key,
-                product=get_product,
-                quantity=1,
-                total=get_product.price,
-                sub_total=get_product.price)
-            cartproduct.save()
-            unique_key.total = unique_key.total + get_product.price
-            unique_key.save()
-            back = request.META.get('HTTP_REFERER')
-            return redirect(back)
-
-    # creates a new session key
-    else:
-        unique_key = Cart.objects.create(total=0)
-        request.session['cart_unique_key'] = unique_key.id
-        cartproduct = CartDetail.objects.create(
-            unique_cart=unique_key,
-            product=get_product,
-            quantity=1,
-            total=get_product.price,
-            sub_total=get_product.price)
-        cartproduct.save()
-        unique_key.total = unique_key.total + get_product.price
-        unique_key.save()
-        back = request.META.get('HTTP_REFERER')
-        return redirect(back)
+    # if cart_session_key:
+    #     unique_key = Cart.objects.get(id=cart_session_key)
+    #     try:
+    #         # if product already exists in cart
+    #         cartproduct = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
+    #         cartproduct.quantity = cartproduct.quantity + 1
+    #         cartproduct.total = cartproduct.sub_total * cartproduct.quantity
+    #         cartproduct.save()
+    #         unique_key.total = unique_key.total + get_product.price
+    #         unique_key.save()
+    #         back = request.META.get('HTTP_REFERER')
+    #         return redirect(back)
+    #
+    #     # new product when added in cart
+    #     except CartDetail.DoesNotExist:
+    #         cartproduct = CartDetail.objects.create(
+    #             unique_cart=unique_key,
+    #             product=get_product,
+    #             quantity=1,
+    #             total=get_product.price,
+    #             sub_total=get_product.price)
+    #         cartproduct.save()
+    #         unique_key.total = unique_key.total + get_product.price
+    #         unique_key.save()
+    #         back = request.META.get('HTTP_REFERER')
+    #         return redirect(back)
+    #
+    # # creates a new session key
+    # else:
+    #     unique_key = Cart.objects.create(total=0)
+    #     request.session['cart_unique_key'] = unique_key.id
+    #     cartproduct = CartDetail.objects.create(
+    #         unique_cart=unique_key,
+    #         product=get_product,
+    #         quantity=1,
+    #         total=get_product.price,
+    #         sub_total=get_product.price)
+    #     cartproduct.save()
+    #     unique_key.total = unique_key.total + get_product.price
+    #     unique_key.save()
+    #     back = request.META.get('HTTP_REFERER')
+    #     return redirect(back)
 
 
 def cart_view(request):

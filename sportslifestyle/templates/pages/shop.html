@@ -13,17 +13,16 @@
                 <div class="row mt-3 mb-5 mx-auto  container-fluid">
                     <h3 class="mr-3 mt-1.5">Filter:</h3>
                     <h3>
-                        <select class="size mr-5">
-                            <option>Price</option>
-                            <option>High to Low</option>
-                            <option>Low to High</option>
-                        </select>
-                    </h3>
-                    <h3>
-                        <select class="size">
-                            <option>Date Added</option>
-                            <option>Old to New</option>
-                            <option>New to Old</option>
+                        <select class="size mr-5" onchange="location = this.value;">
+                            {#                           <option value="{% url 'shop' %}?sort=-id" {% if not sortOrder %}selected{% endif %}>Default</option>#}
+                            {#                            {% for link in filterLinks %}#}
+                            {#                                <option value="{{ link.1 }}"#}
+                            {#                                        {% if link.1 == request.get_full_path %}selected{% endif %}>{{ link.0 }}</option>#}
+                            {#                            {% endfor %}#}
+                            {% for link in filterLinks %}
+                                <option value="{{ link.1 }}"
+                                        {% if link.1 == request.get_full_path %}selected{% endif %}>{{ link.0 }}</option>
+                            {% endfor %}
                         </select>
                     </h3>
                 </div>
@@ -50,8 +49,8 @@
                             4.5 <i class="fas fa-star"></i> | (39)
                         </div>
                         <h4>Rs.{{ products.price }}</h4>
-                        <a href="{% url 'add-to-cart' products.id %}" type="button" class="btn btn-primary buy-btn">Add
-                            to Cart</a>
+                        <a href="{% url 'product-detail' products.slug %}" type="button"
+                           class="btn btn-primary buy-btn">View More</a>
                     </div>
                 </div>
             {% endfor %}
@@ -65,7 +64,9 @@
                 {# checking if previous page is present #}
                 {% if productData.has_previous %}
                     <li class="page-item ">
-                        <a class="page-link" href="?page={{ productData.previous_page_number }}"
+                        {#                        <a class="page-link" href="?page={{ productData.previous_page_number }}"#}
+                        {#                           tabindex="-1">Previous</a>#}
+                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.previous_page_number }}"
                            tabindex="-1">Previous</a>
                     </li>
                 {% endif %}
@@ -79,7 +80,9 @@
                         </li>
                     {% else %}
                         <li class="page-item ">
-                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>
+                            {#                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>#}
+                            <a class="page-link"
+                               href="?sort={{ sortOrder }}&page={{ page_number }}">{{ page_number }} </a>
                         </li>
 
                     {% endif %}
@@ -88,7 +91,8 @@
                 {# checking if next page is present #}
                 {% if productData.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ productData.next_page_number }}" tabindex="+1">Next</a>
+                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.next_page_number }}"
+                           tabindex="+1">Next</a>
                     </li>
                 {% endif %}
             </ul>
