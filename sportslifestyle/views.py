@@ -371,4 +371,43 @@ def profile(request):
 
 
 def offer(request):
-    return render(request, 'pages/offer.html')
+    data = {
+        'title': 'Offers',
+    }
+    return render(request, 'pages/offer.html', data)
+
+
+def ratings(request):
+    if request.method == 'POST':
+        # Get the review, rating, and product ID from the POST request.
+        review = request.POST.get('review')
+        rating = request.POST.get('rating')
+        product_id = request.POST.get('product_id')
+        # Retrieve the product object using the product ID.
+        product = Product.objects.get(id=product_id)
+        # Retrieve the authenticated user using the request object.
+        auth_user = request.user.id
+        auth = User.objects.get(id=auth_user)
+        # Check if there is an existing comment object for this user and product
+        if Comment.objects.filter(user=auth, product=product).exists():
+            # If there is an existing comment object, update its review and ratings.
+            comment_ojb = Comment.objects.get(user=auth, product=product)
+            comment_ojb.review = review
+            comment_ojb.rating = rating
+            comment_ojb.save()
+            messages.success(request, "Comment was successfully updated")
+            # Redirect the user back to the referring page with a success message.
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            # If there is no existing comment object, create a new one.
+            review = Comment.objects.create(
+                product=product,
+                review=review,
+                rating=rating,
+                user=auth
+            )
+        review.save()
+        messages.success(request, "Comment was successfully added")
+        # Redirect the user back to the referring page with a success message.
+        return redirect(request.META.get('HTTP_REFERER'))

@@ -147,50 +147,59 @@
         </div>
     </section>
 
-    <section class="add-comment">
+    {% if user.is_authenticated %}
+        <section class="add-comment">
 
-        <div class="row mx-auto container-fluid">
+            <div class="row mx-auto container-fluid">
 
-            <div class="col-12">
+                <div class="col-12">
 
-                <div class="comment-box ml-2 mb-3">
+                    <div class="comment-box ml-2 mb-3">
 
-                    <h4>Publish Review</h4>
+                        <h4>Publish Review</h4>
+                        <form action="{% url 'ratings' %}" method="post">
+                            {% csrf_token %}
+                            <div class="rating mt-2 mb-2">
+                                <input type="hidden" name="product_id"  value="{{ productData.id }}">
+                                <input type="radio" name="rating" value="5" id="5" required><label for="5">☆</label>
+                                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                            </div>
 
-                    <div class="rating mt-2 mb-2">
-                        <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                        <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                        <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                        <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                        <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                            <div class="comment-area">
+
+                                <textarea class="form-control" name="review" placeholder="what is your view?" rows="8" required></textarea>
+
+                            </div>
+
+                            <div class="comment-btns mt-2">
+                                <div class="pull-right mb-3">
+
+                                    <button class="btn  send btn-sm mt-3">Post <i
+                                            class="fa fa-long-arrow-right ml-1"></i>
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </form>
+
+
                     </div>
-
-                    <div class="comment-area">
-
-                        <textarea class="form-control" placeholder="what is your view?" rows="8"></textarea>
-
-                    </div>
-
-                    <div class="comment-btns mt-2">
-                        <div class="pull-right mb-3">
-
-                            <button class="btn  send btn-sm mt-3">Post <i class="fa fa-long-arrow-right ml-1"></i>
-                            </button>
-
-                        </div>
-
-
-                    </div>
-
 
                 </div>
 
             </div>
 
-        </div>
 
-
-    </section>
+        </section>
+    {% else %}
+        <section class="add-comment d-flex justify-content-center">
+            <h4>Register to Add reviews</h4>
+        </section>
+    {% endif %}
 
     <section id="products" class="my-5 pb-5">
         <div class="container text-center  py-5">

@@ -63,8 +63,13 @@ class AdminUniqueCart(admin.ModelAdmin):
 
 @admin.register(Order)
 class AdminOrder(admin.ModelAdmin):
-    list_display = ['customer',  'total', 'status']
+    list_display = ['customer', 'total', 'status']
     list_editable = ['status']
+
+
+@admin.register(Comment)
+class AdminComment(admin.ModelAdmin):
+    list_display = ['user', 'product', 'rating', 'review']
 
 
 admin.site.register(Return)
