@@ -48,6 +48,24 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    # find discount price for display
+    def dis_price(self):
+        return self.price - self.discount
+
+    # find total number of reviews in product
+    def total_review(self):
+        return self.comment_set.count()
+
+    # find avg number of rating in product
+    def avg_rating(self):
+        total = 0
+        for comment in self.comment_set.all():
+            total += comment.rating
+        if total > 0:
+            return total / self.total_review()
+        else:
+            return 0
+
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -116,6 +134,9 @@ class CartDetail(models.Model):
     variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, null=True, blank=True)
     sub_total = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return f"({self.variant.size.name})"
+
 
 class Order(models.Model):
     order_status = (
@@ -153,4 +174,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.product.name
-

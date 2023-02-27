@@ -57,8 +57,21 @@ class AdminCart(admin.ModelAdmin):
 
 
 @admin.register(CartDetail)
-class AdminUniqueCart(admin.ModelAdmin):
-    pass
+class CartDetailAdmin(admin.ModelAdmin):
+    # Specify the fields to display in the list view of the admin site
+    list_display = ('unique_cart', 'product', 'quantity', 'total', 'size',)
+
+    # Define a custom method to display the size name in the list view
+    def size(self, obj):
+        if obj.variant:
+            # If a variant is selected, display the size name
+            return obj.variant.size.name
+        else:
+            # If no variant is selected, display a dash (-)
+            return "-"
+
+    # Set the admin_order_field attribute to allow sorting by size name
+    size.admin_order_field = 'variant__size__name'
 
 
 @admin.register(Order)

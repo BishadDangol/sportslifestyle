@@ -37,8 +37,14 @@
             <h2>Latest Products</h2>
         </div>
         <div class="row mx-auto  container-fluid">
+
             {% for product in productData|slice:":8" %} {#display only 8 products#}
                 <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if product.discount > 0 %}
+                        <div class="sale-top">
+                            Sale
+                        </div>
+                    {% endif %}
                     {# show if image is present #}
                     {% if product.image %}
                         <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
@@ -47,13 +53,26 @@
                     <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
                         <h5>{{ product.name }}</h5>
                         <div class="star">
-                            4.5 <i class="fas fa-star"></i> | (39)
+                            {{ product.avg_rating }} <i class="fas fa-star"></i> | ({{ product.total_review }})
                         </div>
-                        <h4>Rs.{{ product.price }}</h4>
+                        {% if product.discount > 0 %}
+                            <div class="style-1 mt-2">
+                                <del>
+                                    <span class="amount">Rs.{{ product.price|floatformat:0 }}</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">Rs.{{ product.dis_price|floatformat:0 }}</span>
+                                </ins>
+                            </div>
+                        {% else %}
+                            <h4>Rs.{{ product.price|floatformat:0 }}</h4>
+                        {% endif %}
                     </div>
-                     <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View More</a>
+                    <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View
+                        More</a>
                 </div>
             {% endfor %}
+
 
         </div>
 
@@ -71,6 +90,11 @@
         <div class="row mx-auto  container-fluid">
             {% for product in clothingData|slice:":8" %} {#display only 8 products#}
                 <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if product.discount > 0 %}
+                        <div class="sale-top">
+                            Sale
+                        </div>
+                    {% endif %}
                     {# show if image is present #}
                     {% if product.image %}
                         <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
@@ -79,11 +103,23 @@
                     <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
                         <h5>{{ product.name }}</h5>
                         <div class="star">
-                            4.5 <i class="fas fa-star"></i> | (39)
+                            {{ product.avg_rating }} <i class="fas fa-star"></i> | ({{ product.total_review }})
                         </div>
-                        <h4>Rs.{{ product.price }}</h4>
+                        {% if product.discount > 0 %}
+                            <div class="style-1 mt-2">
+                                <del>
+                                    <span class="amount">Rs.{{ product.price|floatformat:0 }}</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">Rs.{{ product.dis_price|floatformat:0 }}</span>
+                                </ins>
+                            </div>
+                        {% else %}
+                            <h4>Rs.{{ product.price|floatformat:0 }}</h4>
+                        {% endif %}
                     </div>
-                    <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View More</a>
+                    <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View
+                        More</a>
                 </div>
             {% endfor %}
 
@@ -107,6 +143,11 @@
         <div class="row mx-auto  container-fluid">
             {% for product in shoeData|slice:":8" %} {#display only 8 products#}
                 <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if product.discount > 0 %}
+                        <div class="sale-top">
+                            Sale
+                        </div>
+                    {% endif %}
                     {# show if image is present #}
                     {% if product.image %}
                         <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
@@ -115,11 +156,23 @@
                     <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
                         <h5>{{ product.name }}</h5>
                         <div class="star">
-                            4.5 <i class="fas fa-star"></i> | (39)
+                            {{ product.avg_rating }} <i class="fas fa-star"></i> | ({{ product.total_review }})
                         </div>
-                        <h4>Rs.{{ product.price }}</h4>
+                        {% if product.discount > 0 %}
+                            <div class="style-1 mt-2">
+                                <del>
+                                    <span class="amount">Rs.{{ product.price|floatformat:0 }}</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">Rs.{{ product.dis_price|floatformat:0 }}</span>
+                                </ins>
+                            </div>
+                        {% else %}
+                            <h4>Rs.{{ product.price|floatformat:0 }}</h4>
+                        {% endif %}
                     </div>
-                     <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View More</a>
+                    <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View
+                        More</a>
                 </div>
             {% endfor %}
 

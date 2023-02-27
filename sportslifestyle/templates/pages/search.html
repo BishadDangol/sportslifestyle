@@ -11,6 +11,11 @@
             {% if productData %}
                 {% for products in productData %}
                     <div class="product text-center col-lg-3 col-md-4 col-12">
+                        {% if products.discount > 0 %}
+                            <div class="sale-top">
+                                Sale 20% off
+                            </div>
+                        {% endif %}
                         <a href="{% url 'product-detail' products.slug %} ">
                             {% if products.image %}
                                 <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
@@ -19,9 +24,20 @@
                         <div class="desc">
                             <h5>{{ products.name }}</h5>
                             <div class="star">
-                                4.5 <i class="fas fa-star"></i> | (39)
+                                {{ products.avg_rating }} <i class="fas fa-star"></i> | ({{ products.total_review }})
                             </div>
-                            <h4>Rs.{{ products.price }}</h4>
+                            {% if products.discount > 0 %}
+                                <div class="style-1 mt-2">
+                                    <del>
+                                        <span class="amount">Rs.{{ products.price|floatformat:0 }}</span>
+                                    </del>
+                                    <ins>
+                                        <span class="amount">Rs.{{ products.dis_price|floatformat:0 }}</span>
+                                    </ins>
+                                </div>
+                            {% else %}
+                                <h4>Rs.{{ products.price|floatformat:0 }}</h4>
+                            {% endif %}
                             <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
                         </div>
                     </div>

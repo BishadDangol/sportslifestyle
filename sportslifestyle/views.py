@@ -166,7 +166,7 @@ def add_to_cart(request, id):
                 unique_key = Cart.objects.get(id=cart_session_key)
                 try:
                     # if product already exists in cart
-                    cart_product = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
+                    cart_product = CartDetail.objects.get(unique_cart=unique_key, product=get_product, variant=variant)
                     cart_product.quantity = cart_product.quantity + int(quantity)
                     cart_product.total = cart_product.sub_total * cart_product.quantity
                     cart_product.save()
@@ -205,49 +205,6 @@ def add_to_cart(request, id):
                 back = request.META.get('HTTP_REFERER')
                 return redirect(back)
 
-    # if session key exist
-    # if cart_session_key:
-    #     unique_key = Cart.objects.get(id=cart_session_key)
-    #     try:
-    #         # if product already exists in cart
-    #         cartproduct = CartDetail.objects.get(unique_cart=unique_key, product=get_product)
-    #         cartproduct.quantity = cartproduct.quantity + 1
-    #         cartproduct.total = cartproduct.sub_total * cartproduct.quantity
-    #         cartproduct.save()
-    #         unique_key.total = unique_key.total + get_product.price
-    #         unique_key.save()
-    #         back = request.META.get('HTTP_REFERER')
-    #         return redirect(back)
-    #
-    #     # new product when added in cart
-    #     except CartDetail.DoesNotExist:
-    #         cartproduct = CartDetail.objects.create(
-    #             unique_cart=unique_key,
-    #             product=get_product,
-    #             quantity=1,
-    #             total=get_product.price,
-    #             sub_total=get_product.price)
-    #         cartproduct.save()
-    #         unique_key.total = unique_key.total + get_product.price
-    #         unique_key.save()
-    #         back = request.META.get('HTTP_REFERER')
-    #         return redirect(back)
-    #
-    # # creates a new session key
-    # else:
-    #     unique_key = Cart.objects.create(total=0)
-    #     request.session['cart_unique_key'] = unique_key.id
-    #     cartproduct = CartDetail.objects.create(
-    #         unique_cart=unique_key,
-    #         product=get_product,
-    #         quantity=1,
-    #         total=get_product.price,
-    #         sub_total=get_product.price)
-    #     cartproduct.save()
-    #     unique_key.total = unique_key.total + get_product.price
-    #     unique_key.save()
-    #     back = request.META.get('HTTP_REFERER')
-    #     return redirect(back)
 
 
 def cart_view(request):
@@ -262,7 +219,9 @@ def cart_view(request):
             'cartData': CartDetail.objects.filter(unique_cart=unique_key),
             'uniqueKey': unique_key
         }
-    return render(request, 'pages/cart.html', data)
+        return render(request, 'pages/cart.html', data)
+    else:
+        return render(request, 'pages/cart.html')
 
 
 def remove_from_cart(request, id):
