@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -130,14 +130,16 @@ def search(request):
 
 
 def sort_category(request, slug):
+    category = get_object_or_404(Category, slug=slug)
     product_list = Product.objects.filter(category__slug=slug).order_by('-id')
     paginator = Paginator(product_list, 5)  # Show 5 products per page.
     page_number = request.GET.get('page')  # get number of page
     page_obj = paginator.get_page(page_number)
     data = {
         'productData': page_obj,
+        'catName': category.name
     }
-    return render(request, 'pages/shop.html', data)
+    return render(request, 'pages/category.html', data)
 
 
 def product_detail(request, slug):
@@ -204,7 +206,6 @@ def add_to_cart(request, id):
                 unique_key.save()
                 back = request.META.get('HTTP_REFERER')
                 return redirect(back)
-
 
 
 def cart_view(request):
@@ -325,8 +326,17 @@ def checkout(request):
         return render(request, 'pages/checkout.html')
 
 
+@login_required(login_url='login')
 def profile(request):
-    return render(request, 'pages/profile.html')
+    # Get the ID of the current user
+    profile_id = request.user.id
+    data = {
+        # Retrieve all the Order objects associated with the Customer object
+        # corresponding to the current user
+        'ordersData': Order.objects.filter(customer=Customer.objects.get(user=profile_id)),
+        'title': 'Profile'
+    }
+    return render(request, 'pages/profile.html', data)
 
 
 def offer(request):

@@ -1,0 +1,78 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <section id="products" class="my-5 py-5">
+        <div class="container text-center mt-5 py-5">
+            <h2>Category "{{ catName }}"</h2>
+        </div>
+
+
+        
+        <div class="row mx-auto  container-fluid">
+
+
+            {% for products in productData %}
+                <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if products.image %}
+                        <a href="{% url 'product-detail' products.slug %}">
+                            <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                        </a>
+                    {% endif %}
+                    <div class="desc">
+                        <h5>{{ products.name }}</h5>
+                        <div class="star">
+                            {{ products.avg_rating }} <i class="fas fa-star"></i> | ({{ products.total_review }})
+                        </div>
+                        <h4>Rs.{{ products.price }}</h4>
+                        <a href="{% url 'product-detail' products.slug %}" type="button"
+                           class="btn btn-primary buy-btn">View More</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+
+        <nav aria-label="..." class="d-flex justify-content-center">
+            <ul class="pagination pagination-lg">
+                {# checking if previous page is present #}
+                {% if productData.has_previous %}
+                    <li class="page-item ">
+                        {#                        <a class="page-link" href="?page={{ productData.previous_page_number }}"#}
+                        {#                           tabindex="-1">Previous</a>#}
+                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.previous_page_number }}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+
+                {# creating loop to iterate over number of pages #}
+                {% for page_number in productData.paginator.page_range %} {# page_range tot pages [1,2,3] #}
+                    {# finding the current page#}
+                    {% if productData.number == page_number %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ page_number }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item ">
+                            {#                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>#}
+                            <a class="page-link"
+                               href="?sort={{ sortOrder }}&page={{ page_number }}">{{ page_number }} </a>
+                        </li>
+
+                    {% endif %}
+                {% endfor %}
+
+                {# checking if next page is present #}
+                {% if productData.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.next_page_number }}"
+                           tabindex="+1">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+
+    </section>
+
+{% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'main/main.html' %}
 {% block content %}
-{#    <section id="products" class="my-5 py-5">#}
-{#        <div class="container text-center mt-5 py-5">#}
-{#            <h2>PROFILE</h2>#}
-{#        </div>#}
-{#    </section>#}
+    {#    <section id="products" class="my-5 py-5">#}
+    {#        <div class="container text-center mt-5 py-5">#}
+    {#            <h2>PROFILE</h2>#}
+    {#        </div>#}
+    {#    </section>#}
 
 
 
@@ -20,8 +20,8 @@
 
             <div class="col-lg-6 col-md-12 col-12">
 
-                <h2>Harrry W2s </h2>
-                <p>harry.w2scanneverbecancelled@gmail.com </p>
+                <h2>{{ request.user.username }} </h2>
+                <p>{{ request.user.email }} </p>
                 <button type="button" class="btn btn-primary buy-btn mr-4">Edit Profile</button>
                 <a href="{% url 'logout' %}">
                     <button type="button" class="btn btn-primary buy-btn">Logout</button>
@@ -54,30 +54,16 @@
                         </thead>
 
                         <tbody>
-                        <tr class="pt-5 pb-3">
-                            <td><h3>10</h3></td>
-                            <td><h3>Harry W2s</h3></td>
-                            <td><h3>England</h3></td>
-                            <td><h3>982105000</h3></td>
-                            <td><h3>shipping</h3></td>
-                            <td><a href="#"><h3>View</h3></a></td>
-                        </tr>
-                        <tr>
-                            <td><h3>10</h3></td>
-                            <td><h3>Harry W2s</h3></td>
-                            <td><h3>England</h3></td>
-                            <td><h3>982105000</h3></td>
-                            <td><h3>shipping</h3></td>
-                            <td><a href="#"><h3>View</h3></a></td>
-                        </tr>
-                        <tr>
-                            <td><h3>10</h3></td>
-                            <td><h3>Harry W2s</h3></td>
-                            <td><h3>England</h3></td>
-                            <td><h3>982105000</h3></td>
-                            <td><h3>shipping</h3></td>
-                            <td><a href="#"><h3>View</h3></a></td>
-                        </tr>
+                        {% for orders in ordersData %}
+                            <tr class="pt-5 pb-3">
+                                <td><h3>{{ orders.id }}</h3></td>
+                                <td><h3>{{ orders.full_name }}</h3></td>
+                                <td><h3>{{ orders.address }}</h3></td>
+                                <td><h3>{{ orders.phone }}</h3></td>
+                                <td><h3>{{ orders.status }}</h3></td>
+                                <td><a href="#"><h3>View</h3></a></td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </section>
