@@ -70,7 +70,7 @@
         {% endif %}
     </div>
 
-    <form action="{% url 'search' %}" method="post" class="search-form">
+    <form action="{% url 'search' %}"  class="search-form">
         {% csrf_token %}
         <input type="search" name="search" id="search-box" placeholder="search here...">
         <label for="search-box" class="fas fa-search"></label>

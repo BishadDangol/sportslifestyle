@@ -1,3 +1,5 @@
+import csv
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator
@@ -109,24 +111,19 @@ def shop(request):
 
 
 def search(request):
-    # if search is done from post method
-    if request.method == "POST":
-        # storing entered words in keyword variable
-        keyword = request.POST['search']
-        # filtering keyword in models
-        product_list = Product.objects.filter(
-            Q(name__icontains=keyword) | Q(description__icontains=keyword))  # icontains checks case-sensitive
-        # paginator = Paginator(product_list, 5)  # Show 5 products per page.
-        # page_number = request.GET.get('page')  # get number of page
-        # page_obj = paginator.get_page(page_number)
-        data = {
-            'productData': product_list,
-            'result': keyword,
-        }
-        return render(request, 'pages/search.html', data)
-    else:
-
-        return redirect('index')
+    # storing entered words in keyword variable
+    keyword = request.GET.get('search')
+    # filtering keyword in models
+    product_list = Product.objects.filter(
+        Q(name__icontains=keyword) | Q(description__icontains=keyword))  # icontains checks case-sensitive
+    # paginator = Paginator(product_list, 5)  # Show 5 products per page.
+    # page_number = request.GET.get('page')  # get number of page
+    # page_obj = paginator.get_page(page_number)
+    data = {
+        'productData': product_list,
+        'result': keyword,
+    }
+    return render(request, 'pages/search.html', data)
 
 
 def sort_category(request, slug):
@@ -364,6 +361,12 @@ def ratings(request):
             comment_ojb.review = review
             comment_ojb.rating = rating
             comment_ojb.save()
+            all_comment = Comment.objects.all()
+            with open('ratings.csv', 'w') as f:
+                writer = csv.writer(f)
+                writer.writerow(['id', 'user_id', 'product_id', 'rating'])
+                for i in all_comment:
+                    writer.writerow([i.id, i.user.id, i.product.id, i.rating])
             messages.success(request, "Comment was successfully updated")
             # Redirect the user back to the referring page with a success message.
             return redirect(request.META.get('HTTP_REFERER'))
@@ -377,6 +380,13 @@ def ratings(request):
                 user=auth
             )
         review.save()
+        all_comment = Comment.objects.all()
+        # write csv file
+        with open('ratings.csv', 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow(['id', 'user_id', 'product_id', 'rating'])
+            for i in all_comment:
+                writer.writerow([i.id, i.user.id, i.product.id, i.rating])
         messages.success(request, "Comment was successfully added")
         # Redirect the user back to the referring page with a success message.
         return redirect(request.META.get('HTTP_REFERER'))
