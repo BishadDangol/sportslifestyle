@@ -83,7 +83,7 @@ def new_arrivals(request):
 
 def shop(request):
     sort_order = request.GET.get('sort', '-id')  # Get the sort order from the query string
-    product_list = Product.objects.all().order_by(sort_order)
+    product_list = Product.objects.exclude(discount__gt=0).order_by(sort_order)  # Get products with no discount
 
     paginator = Paginator(product_list, 5)  # Show 5 products per page.
     page_number = request.GET.get('page')  # get number of page
@@ -140,8 +140,12 @@ def sort_category(request, slug):
 
 
 def product_detail(request, slug):
+    get_product = Product.objects.get(slug=slug)
+    cat_id = get_product.category.id
+    similar_products = Product.objects.filter(category__id=cat_id).exclude(id=get_product.id).order_by('-id')
     data = {
-        'productData': Product.objects.get(slug=slug)
+        'productData': Product.objects.get(slug=slug),
+        'similarData': similar_products[0:4],
     }
     return render(request, 'pages/product-detail.html', data)
 
@@ -212,11 +216,15 @@ def cart_view(request):
     if cart_session_key:
         # finds cart owner with relation to session key
         unique_key = Cart.objects.get(id=cart_session_key)
-        data = {
-            # filters each product in CartDetail related to single Cart model
-            'cartData': CartDetail.objects.filter(unique_cart=unique_key),
-            'uniqueKey': unique_key
-        }
+        # check if cart is empty
+        if unique_key.cartdetail_set.count() == 0:
+            return render(request, 'pages/empty.html')
+        else:
+            data = {
+                # filters each product in CartDetail related to single Cart model
+                'cartData': CartDetail.objects.filter(unique_cart=unique_key),
+                'uniqueKey': unique_key
+            }
         return render(request, 'pages/cart.html', data)
     else:
         return render(request, 'pages/cart.html')
@@ -320,7 +328,18 @@ def checkout(request):
         return redirect('index')
 
     else:
-        return render(request, 'pages/checkout.html')
+        product_session_key = request.session.get('cart_unique_key', None)
+        # check if session key exist
+        if product_session_key:
+            cart = Cart.objects.get(id=product_session_key)
+            # find if cart is empty or not
+            if cart.cartdetail_set.count() == 0:
+                return redirect('index')
+            else:
+                return render(request, 'pages/checkout.html')
+
+        else:
+            return redirect('index')
 
 
 @login_required(login_url='login')
@@ -337,8 +356,15 @@ def profile(request):
 
 
 def offer(request):
+    product_list = Product.objects.all()  # Get products with no discount
+    paginator = Paginator(product_list, 100)  # Show 5 products per page.
+    page_number = request.GET.get('page')  # get number of page
+    page_obj = paginator.get_page(page_number)
+
     data = {
+        'productData': page_obj,
         'title': 'Offers',
+
     }
     return render(request, 'pages/offer.html', data)
 
@@ -361,11 +387,11 @@ def ratings(request):
             comment_ojb.review = review
             comment_ojb.rating = rating
             comment_ojb.save()
-            all_comment = Comment.objects.all()
+            all_ratings = Comment.objects.all()
             with open('ratings.csv', 'w') as f:
                 writer = csv.writer(f)
                 writer.writerow(['id', 'user_id', 'product_id', 'rating'])
-                for i in all_comment:
+                for i in all_ratings:
                     writer.writerow([i.id, i.user.id, i.product.id, i.rating])
             messages.success(request, "Comment was successfully updated")
             # Redirect the user back to the referring page with a success message.
@@ -380,12 +406,12 @@ def ratings(request):
                 user=auth
             )
         review.save()
-        all_comment = Comment.objects.all()
+        all_ratings = Comment.objects.all()
         # write csv file
         with open('ratings.csv', 'w') as f:
             writer = csv.writer(f)
             writer.writerow(['id', 'user_id', 'product_id', 'rating'])
-            for i in all_comment:
+            for i in all_ratings:
                 writer.writerow([i.id, i.user.id, i.product.id, i.rating])
         messages.success(request, "Comment was successfully added")
         # Redirect the user back to the referring page with a success message.

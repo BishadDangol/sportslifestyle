@@ -32,27 +32,29 @@
 
         </div>
 
-        
+
         <div class="row mx-auto  container-fluid">
 
 
             {% for products in productData %}
-                <div class="product text-center col-lg-3 col-md-4 col-12">
-                    {% if products.image %}
-                        <a href="{% url 'product-detail' products.slug %}">
-                            <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
-                        </a>
-                    {% endif %}
-                    <div class="desc">
-                        <h5>{{ products.name }}</h5>
-                        <div class="star">
-                            {{ products.avg_rating }} <i class="fas fa-star"></i> | ({{ products.total_review }})
+
+                    <div class="product text-center col-lg-3 col-md-4 col-12">
+                        {% if products.image %}
+                            <a href="{% url 'product-detail' products.slug %}">
+                                <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
+                            </a>
+                        {% endif %}
+                        <div class="desc">
+                            <h5>{{ products.name }}</h5>
+                            <div class="star">
+                                {{ products.avg_rating }} <i class="fas fa-star"></i> | ({{ products.total_review }})
+                            </div>
+                            <h4>Rs.{{ products.price }}</h4>
+                            <a href="{% url 'product-detail' products.slug %}" type="button"
+                               class="btn btn-primary buy-btn">View More</a>
                         </div>
-                        <h4>Rs.{{ products.price }}</h4>
-                        <a href="{% url 'product-detail' products.slug %}" type="button"
-                           class="btn btn-primary buy-btn">View More</a>
                     </div>
-                </div>
+
             {% endfor %}
 
 

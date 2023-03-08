@@ -8,232 +8,76 @@
         <div style="border-top: var(--border)" class="row mt-2 mb-3 mx-auto  container-fluid">
         </div>
 
-        <div class=" row mt-3 mb-3 mx-auto  container-fluid">
-            <div class="col mt-3 mb-5 mx-auto  container-fluid">
-                <div class="row mt-3 mb-5 mx-auto  container-fluid">
-                    <h3 class="mr-3 mt-1.5">Filter by:</h3>
-                    <h3>
-                        <select class="size mr-5">
-                            <option>Price</option>
-                            <option>S</option>
-                            <option>M</option>
-                            <option>L</option>
-                        </select>
-                    </h3>
-                    <h3>
-                        <select class="size">
-                            <option>Date Added</option>
-                            <option>S</option>
-                            <option>M</option>
-                            <option>L</option>
-                        </select>
-                    </h3>
-                </div>
-
-            </div>
-
-
-        </div>
 
 
         <div class="row mx-auto  container-fluid">
 
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale 10% off
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
+            {% for product in productData %}
+                {% if product.discount > 0 %}
+                    <div class="product text-center col-lg-3 col-md-4 col-12">
+                        {% if product.discount > 0 %}
+                            <div class="sale-top">
+                                Sale
+                            </div>
+                        {% endif %}
+                        {# show if image is present #}
+                        {% if product.image %}
+                            <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
+                                 class="img-fluid mb-3 pro-img" src="{{ product.image.url }}" alt="">
+                        {% endif %}
+                        <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
+                            <h5>{{ product.name }}</h5>
+                            <div class="star">
+                                {{ product.avg_rating }} <i class="fas fa-star"></i> | ({{ product.total_review }})
+                            </div>
 
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale 20% off
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
+                            <div class="style-1 mt-2">
+                                <del>
+                                    <span class="amount">Rs.{{ product.price|floatformat:0 }}</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">Rs.{{ product.dis_price|floatformat:0 }}</span>
+                                </ins>
+                            </div>
+                        </div>
+                        <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View
+                            More</a>
                     </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale 15% off
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale 7% off
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <div class="sale-top">
-                    Sale
-                </div>
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <div class="star">
-                        4.5 <i class="fas fa-star"></i> | (39)
-                    </div>
-                    <div class="style-1 mt-2">
-                        <del>
-                            <span class="amount">Rs.3500</span>
-                        </del>
-                        <ins>
-                            <span class="amount">Rs.32050</span>
-                        </ins>
-                    </div>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-
-
+                {% endif %}
+            {% endfor %}
 
 
         </div>
-        <nav aria-label="..." class="d-flex justify-content-center mt-2">
-            <ul class="pagination pagination-lg">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item ">
-                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
+        <nav aria-label="..." class="d-flex justify-content-center">
+             <ul class="pagination pagination-lg">
+                {% if productData.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ productData.previous_page_number }}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for page_number in productData.paginator.page_range %}
+                    {% if productData.number == page_number %}
+                        <li class="page-item active">
+                            <a href="#" class="page-link">  {{ page_number }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a href="?page={{ page_number }}" class="page-link">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if productData.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ productData.next_page_number }}">Next</a>
+                    </li>
+
+                {% endif %}
         </nav>
+
 
     </section>
 
