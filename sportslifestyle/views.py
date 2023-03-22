@@ -1,5 +1,6 @@
 import csv
 
+from django.contrib.sites import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator
@@ -10,8 +11,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+import requests
 
 
 # Create your views here.
@@ -91,11 +93,11 @@ def shop(request):
     page_obj.sort_order = sort_order  # add sort_order to page_obj
     # Construct the filter option links with the current sort order
     filter_links = [
-        ('Default', f"{reverse('shop')}?sort=-id"),
+        ('Date Added (New to Old)', f"{reverse('shop')}?sort=-id"),
+        ('Date Added (Old to New)', f"{reverse('shop')}?sort=id"),
         ('Price (High to Low)', f"{reverse('shop')}?sort=-price"),
         ('Price (Low to High)', f"{reverse('shop')}?sort=price"),
-        ('Date Added (New to Old)', f"{reverse('shop')}?sort=-id"),
-        ('Date Added (Old to New)', f"{reverse('shop')}?sort=id")
+
     ]
     for i, link in enumerate(filter_links):
         filter_links[i] = (link[0], f"{link[1]}&page={page_number}" if page_number else link[1])
@@ -300,32 +302,82 @@ def decrease_cart(request, id):
 @login_required(login_url='login')
 def checkout(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        full_name = first_name + ' ' + last_name
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        phone_optional = request.POST.get('phone_optional')
-        address = request.POST.get('address')
-        address_optional = request.POST.get('address_optional')
-        city = request.POST.get('city')
-        product_unique_cart_id = request.session.get('cart_unique_key')
-        cat_obj = Cart.objects.get(id=product_unique_cart_id)
-        order_object = Order.objects.create(
-            full_name=full_name,
-            email=email,
-            address=address,
-            address_optional=address_optional,
-            phone=phone,
-            optional_phone=phone_optional,
-            city=city,
-            total=cat_obj.total,
-            unique_cart=Cart.objects.get(id=cat_obj.id),
-            customer=Customer.objects.get(user=request.user)
-        )
-        order_object.save()
-        del request.session['cart_unique_key']
-        return redirect('index')
+        # if payment method is cash
+        if request.POST['paymentMethod'] == 'cash':
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            full_name = first_name + ' ' + last_name
+            email = request.POST.get('email')
+            phone = request.POST.get('phone')
+            phone_optional = request.POST.get('phone_optional')
+            address = request.POST.get('address')
+            address_optional = request.POST.get('address_optional')
+            city = request.POST.get('city')
+            product_unique_cart_id = request.session.get('cart_unique_key')
+            cat_obj = Cart.objects.get(id=product_unique_cart_id)
+            order_object = Order.objects.create(
+                full_name=full_name,
+                email=email,
+                address=address,
+                address_optional=address_optional,
+                phone=phone,
+                optional_phone=phone_optional,
+                city=city,
+                total=cat_obj.total,
+                unique_cart=Cart.objects.get(id=cat_obj.id),
+                customer=Customer.objects.get(user=request.user)
+            )
+            order_object.save()
+            del request.session['cart_unique_key']
+            return redirect('index')
+        # if payment method is khalti
+        else:
+            data = {
+                "return_url": "http://127.0.0.1:8000/success",
+                "website_url": "https://example.com/",
+                "amount": 1300,
+                "purchase_order_id": "test12",
+                "purchase_order_name": "test",
+            }
+            headers = {
+                "Authorization": "Key 93a09b1c580c4496a040e1a92a6e349d"
+
+            }
+            response = requests.post("https://a.khalti.com/api/v2/epayment/initiate/", json=data, headers=headers)
+            print(response, response.text)
+            data = response.json()
+            if response.status_code == 200:
+                first_name = request.POST.get('first_name')
+                last_name = request.POST.get('last_name')
+                full_name = first_name + ' ' + last_name
+                email = request.POST.get('email')
+                phone = request.POST.get('phone')
+                phone_optional = request.POST.get('phone_optional')
+                address = request.POST.get('address')
+                address_optional = request.POST.get('address_optional')
+                city = request.POST.get('city')
+                product_unique_cart_id = request.session.get('cart_unique_key')
+                cat_obj = Cart.objects.get(id=product_unique_cart_id)
+                order_object = Order.objects.create(
+                    full_name=full_name,
+                    email=email,
+                    address=address,
+                    address_optional=address_optional,
+                    phone=phone,
+                    optional_phone=phone_optional,
+                    city=city,
+                    total=cat_obj.total,
+                    unique_cart=Cart.objects.get(id=cat_obj.id),
+                    customer=Customer.objects.get(user=request.user)
+                )
+                order_object.save()
+                del request.session['cart_unique_key']
+                return HttpResponseRedirect(data.get("payment_url"))
+
+            else:
+                messages.error(request, "Something went wrong")
+                back = request.META.get('HTTP_REFERER')
+                return redirect(back)
 
     else:
         product_session_key = request.session.get('cart_unique_key', None)
@@ -416,3 +468,12 @@ def ratings(request):
         messages.success(request, "Comment was successfully added")
         # Redirect the user back to the referring page with a success message.
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+def successpayment(request):
+    data = {
+
+        'title': 'Success',
+
+    }
+    return render(request, 'pages/order-sucess.html', data)

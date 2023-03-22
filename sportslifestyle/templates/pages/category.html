@@ -6,26 +6,41 @@
         </div>
 
 
-        
         <div class="row mx-auto  container-fluid">
 
 
-            {% for products in productData %}
+            {% for product in productData %}
                 <div class="product text-center col-lg-3 col-md-4 col-12">
-                    {% if products.image %}
-                        <a href="{% url 'product-detail' products.slug %}">
-                            <img class="img-fluid mb-3 pro-img" src="{{ products.image.url }}" alt="">
-                        </a>
-                    {% endif %}
-                    <div class="desc">
-                        <h5>{{ products.name }}</h5>
-                        <div class="star">
-                            {{ products.avg_rating }} <i class="fas fa-star"></i> | ({{ products.total_review }})
+                    {% if product.discount > 0 %}
+                        <div class="sale-top">
+                            Sale
                         </div>
-                        <h4>Rs.{{ products.price }}</h4>
-                        <a href="{% url 'product-detail' products.slug %}" type="button"
-                           class="btn btn-primary buy-btn">View More</a>
+                    {% endif %}
+                    {# show if image is present #}
+                    {% if product.image %}
+                        <img onclick="window.location.href='{% url 'product-detail' product.slug %}';"
+                             class="img-fluid mb-3 pro-img" src="{{ product.image.url }}" alt="">
+                    {% endif %}
+                    <div onclick="window.location.href='{% url 'product-detail' product.slug %}';" class="desc">
+                        <h5>{{ product.name }}</h5>
+                        <div class="star">
+                            {{ product.avg_rating }} <i class="fas fa-star"></i> | ({{ product.total_review }})
+                        </div>
+                        {% if product.discount > 0 %}
+                            <div class="style-1 mt-2">
+                                <del>
+                                    <span class="amount">Rs.{{ product.price|floatformat:0 }}</span>
+                                </del>
+                                <ins>
+                                    <span class="amount">Rs.{{ product.dis_price|floatformat:0 }}</span>
+                                </ins>
+                            </div>
+                        {% else %}
+                            <h4>Rs.{{ product.price|floatformat:0 }}</h4>
+                        {% endif %}
                     </div>
+                    <a href="{% url 'product-detail' product.slug %}" type="button" class="btn btn-primary buy-btn">View
+                        More</a>
                 </div>
             {% endfor %}
 
@@ -38,10 +53,9 @@
                 {# checking if previous page is present #}
                 {% if productData.has_previous %}
                     <li class="page-item ">
-                        {#                        <a class="page-link" href="?page={{ productData.previous_page_number }}"#}
-                        {#                           tabindex="-1">Previous</a>#}
-                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.previous_page_number }}"
+                        <a class="page-link" href="?page={{ productData.previous_page_number }}"
                            tabindex="-1">Previous</a>
+
                     </li>
                 {% endif %}
 
@@ -54,9 +68,7 @@
                         </li>
                     {% else %}
                         <li class="page-item ">
-                            {#                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>#}
-                            <a class="page-link"
-                               href="?sort={{ sortOrder }}&page={{ page_number }}">{{ page_number }} </a>
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>
                         </li>
 
                     {% endif %}
@@ -65,8 +77,7 @@
                 {# checking if next page is present #}
                 {% if productData.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?sort={{ sortOrder }}&page={{ productData.next_page_number }}"
-                           tabindex="+1">Next</a>
+                        <a class="page-link" href="?page={{ productData.next_page_number }}">Next</a>
                     </li>
                 {% endif %}
             </ul>

@@ -3,6 +3,14 @@
 
     <section id="products" class="my-5 py-5">
         <div class="container text-center mt-5 py-5">
+            {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">
+                    {{ message }}
+
+                </div>
+            {% endfor %}
+        {% endif %}
             <h2>checkout form</h2>
         </div>
 
@@ -81,29 +89,29 @@
 
                     <div class="d-block my-3">
                         <div class="custom-control custom-radio">
-                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked
-                                   required>
-                            <label class="custom-control-label" for="credit">Cash On Delivery</label>
+                            <input id="cash" name="paymentMethod" value="cash" type="radio" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="cash">Cash on Delivery</label>
                         </div>
                         <div class="custom-control custom-radio">
-                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-                            <label class="custom-control-label" for="debit">Khalti</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                            <label class="custom-control-label" for="paypal">Other</label>
+                            <input id="khalti" name="paymentMethod" value="khalti" type="radio" class="custom-control-input" >
+                            <label class="custom-control-label" for="khalti">Khalti</label>
                         </div>
                     </div>
 
                     <hr class="mb-4">
+
                     <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+
+
                 </form>
+
             </div>
         </div>
 
 
         </div>
     </section>
+
 
 
 {% endblock %}

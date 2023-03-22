@@ -24,4 +24,6 @@ urlpatterns = [
     path("checkout", views.checkout, name='checkout'),
     path("ratings", views.ratings, name='ratings'),
 
+    path("success", views.successpayment, name='success'),
+
 ]

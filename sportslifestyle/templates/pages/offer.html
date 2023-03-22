@@ -48,35 +48,42 @@
 
 
         </div>
-        <nav aria-label="..." class="d-flex justify-content-center">
-             <ul class="pagination pagination-lg">
+
+      <nav aria-label="..." class="d-flex justify-content-center">
+            <ul class="pagination pagination-lg">
+                {# checking if previous page is present #}
                 {% if productData.has_previous %}
-                    <li class="page-item">
+                    <li class="page-item ">
                         <a class="page-link" href="?page={{ productData.previous_page_number }}"
                            tabindex="-1">Previous</a>
+
                     </li>
                 {% endif %}
-                {% for page_number in productData.paginator.page_range %}
+
+                {# creating loop to iterate over number of pages #}
+                {% for page_number in productData.paginator.page_range %} {# page_range tot pages [1,2,3] #}
+                    {# finding the current page#}
                     {% if productData.number == page_number %}
                         <li class="page-item active">
-                            <a href="#" class="page-link">  {{ page_number }}</a>
+                            <a class="page-link" href="#">{{ page_number }}</a>
                         </li>
                     {% else %}
-                        <li class="page-item">
-                            <a href="?page={{ page_number }}" class="page-link">
-                                {{ page_number }}
-                            </a>
+                        <li class="page-item ">
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }} </a>
                         </li>
+
                     {% endif %}
                 {% endfor %}
 
+                {# checking if next page is present #}
                 {% if productData.has_next %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ productData.next_page_number }}">Next</a>
                     </li>
-
                 {% endif %}
+            </ul>
         </nav>
+
 
 
     </section>
