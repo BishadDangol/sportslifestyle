@@ -332,10 +332,15 @@ def checkout(request):
             return redirect('index')
         # if payment method is khalti
         else:
+            product_unique_cart_id = request.session.get('cart_unique_key')
+            cat_obj = Cart.objects.get(id=product_unique_cart_id)
+            total_price = int(cat_obj.grand_total())
+            total = total_price * 100
+
             data = {
                 "return_url": "http://127.0.0.1:8000/success",
                 "website_url": "https://example.com/",
-                "amount": 1300,
+                "amount": total,
                 "purchase_order_id": "test12",
                 "purchase_order_name": "test",
             }
@@ -346,7 +351,22 @@ def checkout(request):
             response = requests.post("https://a.khalti.com/api/v2/epayment/initiate/", json=data, headers=headers)
             print(response, response.text)
             data = response.json()
+            # if payment successful
             if response.status_code == 200:
+                a = response.json()
+                pdi = a.get('pidx')
+                url = "https://a.khalti.com/api/v2/payment/verify/"
+
+                payload = {
+                    'token': pdi,
+                    'amount': total
+                }
+                ver_Header = {
+                    'Authorization': 'Key 93a09b1c580c4496a040e1a92a6e349d'
+                }
+                resTest = requests.request("POST", url, headers=ver_Header, data=payload)
+                print(resTest, resTest.text)
+
                 first_name = request.POST.get('first_name')
                 last_name = request.POST.get('last_name')
                 full_name = first_name + ' ' + last_name

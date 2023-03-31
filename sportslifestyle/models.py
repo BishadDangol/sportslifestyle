@@ -125,6 +125,27 @@ class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
     total = models.PositiveIntegerField(default=0)
 
+    def total_discount(self):
+        total = 0
+        for cart in self.cartdetail_set.all():
+            if cart.product.discount:
+                total += cart.product.discount * cart.quantity
+            else:
+                total += 0
+        return total
+
+    def total_price(self):
+        return self.total - self.total_discount()
+
+    def tax_amount(self):
+        pp = float(self.total_price())
+        return pp * 0.13
+
+    def grand_total(self):
+        tt = float(self.total_price())
+        ta = float(self.tax_amount())
+        return tt + ta
+
 
 class CartDetail(models.Model):
     unique_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)

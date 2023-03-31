@@ -66,24 +66,22 @@
                 <h5>Cart-Total</h5>
                 <div class="d-flex justify-content-between">
                     <h6>Sub-Total</h6>
-                    <p>Rs.5000</p>
+                    <p>Rs.{{ uniqueKey.total }}</p>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <h6>Shipping</h6>
-                    <p>Rs.5000</p>
-                </div>
+
                 <div class="d-flex justify-content-between">
                     <h6>Discount</h6>
-                    <p>Rs.5000</p>
+                    <p>Rs.{{ uniqueKey.total_discount }}</p>
                 </div>
+
                 <div class="d-flex justify-content-between">
                     <h6>Tax</h6>
-                    <p>Rs.5000</p>
+                    <p>Rs.{{ uniqueKey.tax_amount }}</p>
                 </div>
                 <hr>
                 <div class="d-flex justify-content-between">
                     <h6>Total</h6>
-                    <p>Rs.5000</p>
+                    <p>Rs.{{ uniqueKey.grand_total }}</p>
                 </div>
                 <a href="{% url 'checkout' %}" type="button" class="btn btn-primary ml-auto">Checkout</a>
             </div>
