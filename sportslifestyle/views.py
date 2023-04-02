@@ -497,3 +497,42 @@ def successpayment(request):
 
     }
     return render(request, 'pages/order-sucess.html', data)
+
+
+#######################
+#######admin page######
+#######################
+
+def admin_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('admin-panel')
+        else:
+            messages.error(request, "Username or Password is incorrect")
+            return redirect('admin-login')
+    else:
+        return render(request, 'admin-panel/login.html')
+
+
+def admin_logout(request):
+    logout(request)
+    return redirect('admin-login')
+
+@login_required(login_url='admin-login')
+def admin_panel(request):
+    return render(request, 'admin-panel/index.html')
+
+
+def add_product(request):
+    if request.method=="POST":
+        pass
+    else:
+        data={
+            'categoryData': Category.objects.all(),
+            'sizeData': Size.objects.all(),
+        }
+        return render(request, 'admin-panel/add-product.html', data)

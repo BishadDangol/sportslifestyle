@@ -1,0 +1,138 @@
+{% extends 'admin-panel/main.html' %}
+{% block admin_content %}
+    <!-- Main -->
+    <main class="main-container">
+        <div class="main-cards">
+
+            <div class="card-detail">
+                <div class="card-inner">
+                    <p>Total desk</p>
+                </div>
+                <span class="text-primay font-weight-bold">249</span>
+                <span class="tex font-weight-light">seats</span>
+            </div>
+
+            <div class="card-detail">
+                <div class="card-inner">
+                    <p class="text-prmary">Available desk</p>
+                    <img class="size" src="up.png" alt="a">
+                </div>
+                <span class="text-prim font-weight-bold">83</span>
+                <span class="tex font-weight-light">seats</span>
+            </div>
+
+            <div class="card-detail">
+                <div class="card-inner">
+                    <p class="text-prmary">Booked desk</p>
+                    <img class="size" src="up.png" alt="a">
+                </div>
+                <span class="text-primry font-weight-bold">79</span>
+                <span class="tex font-weight-light">seats</span>
+            </div>
+
+            <div class="card-detail">
+                <div class="card-inner">
+                    <p class="text-priary">Cancelled desk</p>
+                    <img class="size" src="down.png" alt="a">
+                </div>
+                <span class="text-primry font-weight-bold">56</span>
+                <span class="tex font-weight-light">employees</span>
+            </div>
+
+        </div>
+
+        <div class="barchart">
+            <div class="charts-card">
+                <p class="chart-title">Booking Statistics</p>
+                <div id="bar-chart"></div>
+            </div>
+        </div>
+
+        <div class="charts">
+
+            <div class="chart-table">
+                <table class="table  mb-0 bg-white ">
+                    <thead class="bg-light-1">
+                    <p class="chart-title">Employee Status</p>
+                    <tr class="light">
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Age</th>
+                        <th>Attendance</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
+                                     style="width: 45px; height: 45px" class="rounded-circle"/>
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">Justin Lipshutz</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Frontend</td>
+                        <td>22</td>
+                        <td>88%</td>
+                        <td>
+                            <span class="badge bg-success">Permanent</span>
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://mdbootstrap.com/img/new/avatars/6.jpg" class="rounded-circle" alt=""
+                                     style="width: 45px; height: 45px"/>
+                                <div class="ms-3 gap-2">
+                                    <p class="fw-bold mb-1">Marcus Culhane</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>Design</td>
+                        <td>24</td>
+                        <td>75%</td>
+                        <td>
+                            <span class="badge bg-secondary">Contract</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="https://mdbootstrap.com/img/new/avatars/7.jpg" class="rounded-circle" alt=""
+                                     style="width: 45px; height: 45px"/>
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">Leo Stanon</p>
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>Fullstack</td>
+                        <td>28</td>
+                        <td>89%</td>
+                        <td>
+                            <span class="badge bg-success">Permanent</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+            <div class="charts-card">
+                <p class="chart-title">Employee Composition</p>
+                <div id="pie-chart"></div>
+                <h6>200 Employees</h6>
+            </div>
+
+        </div>
+
+
+    </main>
+    <!-- End Main -->
+{% endblock %}
+

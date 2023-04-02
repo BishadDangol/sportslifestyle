@@ -26,4 +26,9 @@ urlpatterns = [
 
     path("success", views.successpayment, name='success'),
 
+    path('admin-login', views.admin_login, name='admin-login'),
+    path('admin-logout', views.admin_logout, name='admin-logout'),
+    path('admin-panel', views.admin_panel, name='admin-panel'),
+    path('add-product', views.add_product, name='add-product'),
+
 ]

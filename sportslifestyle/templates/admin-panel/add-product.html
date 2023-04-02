@@ -1,0 +1,40 @@
+{% extends 'admin-panel/main.html' %}
+{% block admin_content %}
+    <div class="row">
+
+        <div class="col-md-12 mt-5 ">
+                <div class="mb-3 ml-4">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                        {% for cat in categoryData %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="mb-3 ml-4">
+                    <label for="size">Size</label>
+                    <select name="size" id="size_select" class="form-control">
+                        {% for siz in sizeData %}
+                            <option value="{{ siz.id }}">{{ siz.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3 ml-4" style="display: none;" id="show_quantity">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" name="quantity" class="form-control" id="quantity"
+                           required>
+                </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

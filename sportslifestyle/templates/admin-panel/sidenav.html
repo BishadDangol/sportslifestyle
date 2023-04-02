@@ -1,0 +1,44 @@
+<!-- Sidebar -->
+<aside id="sidebar">
+    <div class="sidebar-title">
+        <div class="brand-name">
+            <p>Sports Panel</p>
+        </div>
+        <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+    </div>
+
+    <ul class="sidebar-list">
+        <div class="profile">
+
+            <h4>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% endif %}
+            </h4>
+
+        </div>
+        <a href="{% url 'admin-panel' %}">
+            <li class="sidebar-list-item">
+                <span class="material-icons-outlined">dashboard</span> Dashboard
+            </li>
+        </a>
+        <a href="{% url 'add-product' %}">
+            <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">
+                        leaderboard
+                        </span> Products
+            </li>
+        </a>
+        <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">
+                        badge
+                        </span> Employees
+        </li>
+        <li class="sidebar-list-item">
+                    <span class="material-icons-outlined">
+                        calendar_month
+                        </span> Reservations
+        </li>
+    </ul>
+</aside>
+<!-- End Sidebar -->
