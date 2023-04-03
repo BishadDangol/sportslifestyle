@@ -30,5 +30,8 @@ urlpatterns = [
     path('admin-logout', views.admin_logout, name='admin-logout'),
     path('admin-panel', views.admin_panel, name='admin-panel'),
     path('add-product', views.add_product, name='add-product'),
+    path('admin-product-list', views.admin_product_list, name='admin-product-list'),
+    path('admin-product-delete/<int:id>', views.admin_product_delete, name='admin-product-delete'),
+    path('admin-order-list', views.admin_order_list, name='admin-order-list'),
 
 ]

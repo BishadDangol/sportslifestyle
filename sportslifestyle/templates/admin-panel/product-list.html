@@ -1,0 +1,44 @@
+{% extends 'admin-panel/main.html' %}
+{% block admin_content %}
+    <div class="row ml-5">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>S.n</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in adminProductData %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" width="50" alt="">
+                            {% endif %}
+                        </td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.discount }}</td>
+
+                        <td>
+                            <a href="{% url 'admin-product-delete' product.id %}"
+                               class="btn btn-danger"
+                               onclick="return confirm('are you sure')"
+                            >Delete</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

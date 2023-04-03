@@ -522,17 +522,82 @@ def admin_logout(request):
     logout(request)
     return redirect('admin-login')
 
+
 @login_required(login_url='admin-login')
 def admin_panel(request):
     return render(request, 'admin-panel/index.html')
 
 
 def add_product(request):
-    if request.method=="POST":
-        pass
+    if request.method == "POST":
+        category = request.POST.get('category')
+        size = request.POST.get('size')
+        quantity = request.POST.get('quantity')
+        price = request.POST.get('price')
+        discount_price = request.POST.get('discount_price')
+        name = request.POST.get('name')
+        slug = request.POST.get('slug')
+        description = request.POST.get('description')
+        pObj = Product.objects.create(
+            category=Category.objects.get(id=category),
+            price=price,
+            discount=discount_price,
+            name=name,
+            slug=slug,
+            description=description
+        )
+        last_id = pObj.id
+        if request.FILES.getlist('images'):
+            image = request.FILES.getlist('images')
+            for i in image:
+                if image.index(i) == 0:
+                    Product.objects.filter(id=last_id).update(
+                        image="/photos/products/" + str(i)
+                    )
+                ProductImage.objects.create(
+                    product=Product.objects.get(id=last_id),
+                    image=i
+                )
+        if size:
+            for i in size:
+                ProductVariant.objects.create(
+                    product=Product.objects.get(id=last_id),
+                    size=Size.objects.get(id=i),
+                    quantity=quantity
+                )
+
+        return redirect('admin-product-list')
+
     else:
-        data={
+        data = {
             'categoryData': Category.objects.all(),
             'sizeData': Size.objects.all(),
         }
         return render(request, 'admin-panel/add-product.html', data)
+
+
+def admin_product_delete(request, id):
+    ProductImage.objects.filter(product=Product.objects.get(id=id)).delete()
+    ProductVariant.objects.filter(product=Product.objects.get(id=id)).delete()
+    Product.objects.get(id=id).delete()
+    return redirect('admin-product-list')
+
+
+def admin_product_list(request):
+    data = {
+        'adminProductData': Product.objects.all()
+    }
+    return render(request, 'admin-panel/product-list.html', data)
+
+
+def admin_order_list(request):
+    if request.method == "POST":
+        order_id = request.POST.get('order_id')
+        status = request.POST.get('orderStatus')
+        Order.objects.filter(id=order_id).update(status=status)
+        return redirect('admin-order-list')
+    else:
+        data = {
+            'ordersData': Order.objects.all()
+        }
+        return render(request, 'admin-panel/order.html', data)

@@ -2,7 +2,9 @@
 {% block admin_content %}
     <div class="row">
 
-        <div class="col-md-12 mt-5 ">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-md-12 mt-5 ">
                 <div class="mb-3 ml-4">
                     <label for="category">Category</label>
                     <select name="category" id="category" class="form-control">
@@ -22,17 +24,52 @@
                     </select>
                 </div>
 
-                <div class="mb-3 ml-4" style="display: none;" id="show_quantity">
+                <div class="mb-3 ml-4"  id="show_quantity">
                     <label for="quantity">Quantity</label>
-                    <input type="number" name="quantity" class="form-control" id="quantity"
+                    <input type="number" name="quantity" required class="form-control" id="quantity"
                            required>
                 </div>
 
+                <div class="form-group mb-3 ml-4">
+                    <label for="name">name</label>
+                    <input type="text" name="name" required class="form-control" id="name">
+                </div>
+                <div class="form-group mb-3 ml-4">
+                    <label for="slug">Slug</label>
+                    <input type="text" name="slug" required class="form-control" id="slug">
+                </div>
+                <div class="row ml-3">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="price">Price</label>
+                            <input type="number" name="price" required class="form-control"
+                                   id="price">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="discount_price">Discount Price</label>
+                            <input type="number" name="discount_price" class="form-control"
+                                   id="discount_price">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3 ml-4">
+                    <label for="image">Image</label>
+                    <input type="file" name="images" multiple class="form-control">
+                </div>
+                <div class="form-group mb-3 ml-4">
+                    <label for="description">description</label>
+                    <textarea name="description" id="description"
+                              class="form-control"></textarea>
+                </div>
+                <div class="form-group mb-3 ml-4">
+                    <button class="btn btn-success">Add Product</button>
+                </div>
 
 
-
-
-        </div>
+            </div>
+        </form>
     </div>
 
 

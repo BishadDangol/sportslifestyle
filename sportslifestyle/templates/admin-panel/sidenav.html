@@ -29,16 +29,20 @@
                         </span> Products
             </li>
         </a>
-        <li class="sidebar-list-item">
+        <a href="{% url 'admin-product-list' %}">
+            <li class="sidebar-list-item">
                     <span class="material-icons-outlined">
                         badge
-                        </span> Employees
-        </li>
-        <li class="sidebar-list-item">
+                        </span> List Products
+            </li>
+        </a>
+        <a href="{% url 'admin-order-list' %}">
+            <li class="sidebar-list-item">
                     <span class="material-icons-outlined">
                         calendar_month
-                        </span> Reservations
-        </li>
+                        </span> Orders
+            </li>
+        </a>
     </ul>
 </aside>
 <!-- End Sidebar -->

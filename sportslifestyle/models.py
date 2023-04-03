@@ -146,6 +146,9 @@ class Cart(models.Model):
         ta = float(self.tax_amount())
         return tt + ta
 
+    def get_product_name(self):
+        return self.cartdetail_set.all()[0].product.name
+
 
 class CartDetail(models.Model):
     unique_cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True)
@@ -182,8 +185,25 @@ class Order(models.Model):
     transaction_id = models.CharField(max_length=100, null=True)
     total = models.PositiveIntegerField(default=0)
 
+    loop_order_status = list(order_status)
+
     def __str__(self):
         return str(self.id)
+
+    def get_cart_total(self):
+        return self.unique_cart.total_price()
+
+    def get_cart_items(self):
+        return self.unique_cart.cartdetail_set.all().count()
+
+    def get_cart_discount(self):
+        return self.unique_cart.total_discount()
+
+    def get_tax_amount(self):
+        return self.unique_cart.tax_amount()
+
+    def get_grand_total(self):
+        return self.unique_cart.grand_total()
 
 
 class Comment(models.Model):
