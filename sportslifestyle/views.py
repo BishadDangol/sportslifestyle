@@ -1,6 +1,8 @@
 import csv
+import uuid
 
 from django.contrib.sites import requests
+from django.core.mail import send_mail, BadHeaderError
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.core.paginator import Paginator
@@ -14,6 +16,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import requests
+from django.conf import settings
 
 
 # Create your views here.
@@ -499,6 +502,82 @@ def successpayment(request):
     return render(request, 'pages/order-sucess.html', data)
 
 
+def custom_mail(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if email:
+            try:
+                email = request.POST.get('email')
+                Newsletter.objects.create(email=email)
+                messages.success(request, "Thank you for your message")
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect(request.META.get('HTTP_REFERER'))
+
+        else:
+            return HttpResponse('Make sure all fields are entered and valid.')
+
+    else:
+        return redirect('index')
+
+
+def password_reset(request):
+    # If the user submits a POST request (i.e., fills out the password reset form and clicks submit)
+    if request.method == "POST":
+        # Get the email address submitted in the form
+        email = request.POST.get('email')
+        # If a user with that email exists in the database
+        if User.objects.filter(email=email).exists():
+            # Get the user object associated with that email
+            user = User.objects.get(email=email)
+            # Generate a unique token for this password reset request
+            token = uuid.uuid4()
+            # Create a new PasswordResetToken object with the user and token values
+            PasswordResetToken.objects.create(user=user, token=token)
+            # Send email to user with a link to reset their password, using the token as a parameter in the URL
+            send_mail('Password Reset',
+                      'http://127.0.0.1:8000/password-reset-confirm/' + str(token),
+                      settings.EMAIL_HOST_USER, [user.email])
+            messages.success(request, "Password reset link sent to your email")
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+        else:
+            # If no user with that email was found in the database, display an error message
+            messages.error(request, "Email not found")
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+    else:
+        # If the user has not submitted the form yet, simply display the password reset form
+        return render(request, 'pages/password-reset.html')
+
+
+def password_reset_confirm(request, token):
+    if request.method == "POST":
+        # Get the new password and confirm password submitted in the form
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+        # If the new password and confirm password match
+        if password == confirm_password:
+            # Get the user associated with this password reset request (using the token)
+            user = PasswordResetToken.objects.get(token=token).user
+            # Set the user's password to the new password
+            user.set_password(password)
+            # Save the user object with the new password
+            user.save()
+            # Delete the PasswordResetToken object associated with this request
+            PasswordResetToken.objects.get(token=token).delete()
+            messages.success(request, "Password reset successfully")
+            return redirect('login')
+        else:
+            # If the new password and confirm password do not match, display an error message
+            messages.error(request, "Password not matched")
+            back = request.META.get('HTTP_REFERER')
+            return redirect(back)
+    else:
+        # If the user has not submitted the form yet, display the password reset confirmation form
+        return render(request, 'pages/password-reset-confirm.html')
+
+
 #######################
 #######admin page######
 #######################
@@ -601,3 +680,23 @@ def admin_order_list(request):
             'ordersData': Order.objects.all()
         }
         return render(request, 'admin-panel/order.html', data)
+
+
+def admin_email(request):
+    if request.method == "POST":
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        all_customer = Newsletter.objects.all()
+        for customer in all_customer:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [customer.email],
+                fail_silently=False,
+            )
+        back = request.META.get('HTTP_REFERER')
+        messages.success(request, 'Email sent successfully')
+        return HttpResponseRedirect(back)
+    else:
+        return render(request, 'admin-panel/custom-mail.html')

@@ -23,8 +23,11 @@
         <div class="box">
             <h3>Newsletter</h3>
             <p>Subscribe for latest updates</p>
-            <input type="email" placeholder="your email" class="email">
-            <input type="submit" value="subscribe" class="btn">
+            <form action="{% url 'newsletter' %}" method="post">
+                {% csrf_token %}
+                <input type="email" name="email" required placeholder="your email" class="email">
+                <input type="submit" value="subscribe" class="btn">
+            </form>
         </div>
 
     </div>

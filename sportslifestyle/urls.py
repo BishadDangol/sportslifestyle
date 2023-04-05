@@ -9,11 +9,14 @@ urlpatterns = [
     path("offer", views.offer, name='offer'),
     path("search", views.search, name='search'),
     path('category/<slug>', views.sort_category, name='category'),
+    path('newsletter', views.custom_mail, name='newsletter'),
 
     path("register", views.user_register, name='register'),
     path("login", views.user_login, name='login'),
     path("logout", views.user_logout, name='logout'),
     path("profile", views.profile, name='profile'),
+    path('password-reset', views.password_reset, name='password_reset'),
+    path('password-reset-confirm/<token>', views.password_reset_confirm, name='password-reset-confirm'),
 
     path("cart-view", views.cart_view, name='cart-view'),
     path("add-to-cart/<int:id>", views.add_to_cart, name='add-to-cart'),
@@ -33,5 +36,6 @@ urlpatterns = [
     path('admin-product-list', views.admin_product_list, name='admin-product-list'),
     path('admin-product-delete/<int:id>', views.admin_product_delete, name='admin-product-delete'),
     path('admin-order-list', views.admin_order_list, name='admin-order-list'),
+    path('admin-email', views.admin_email, name='admin-email'),
 
 ]

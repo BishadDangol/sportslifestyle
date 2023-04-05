@@ -1,7 +1,6 @@
 {% extends 'main/main.html' %}
 {% block content %}
 
-
     <div class="login-page mt-5 ">
         {% if messages %}
             {% for message in messages %}
@@ -28,7 +27,9 @@
                 <button class="mt-3 align-items-center login-btn">login</button>
 
             </form>
+            <p>Click here if you <a href="{% url 'password_reset' %}">forgot your password</a></p>
         </div>
+
     </div>
     </div>
 

@@ -115,10 +115,10 @@ class Return(models.Model):
 
 
 class Newsletter(models.Model):
-    news_desc = models.TextField(max_length=500, blank=True)
+    email = models.EmailField(blank=True, null=True)
 
     def __str__(self):
-        return self.news_desc
+        return self.email
 
 
 class Cart(models.Model):
@@ -215,3 +215,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
