@@ -31,6 +31,15 @@ def user_register(request):
         if User.objects.filter(username=name).exists():
             messages.error(request, 'Username already exists')
             return redirect('register')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists')
+            return redirect('register')
+        if Customer.objects.filter(contact=contact).exists():
+            messages.error(request, 'Phone number already exists')
+            return redirect('register')
+        if len(contact) != 10:
+            messages.error(request, 'Phone number must have 10 digits')
+            return redirect('register')
         user = User.objects.create_user(username=name, email=email, password=password)
         Customer.objects.create(user=user, contact=contact, )
         messages.success(request, 'Successfully registered')
