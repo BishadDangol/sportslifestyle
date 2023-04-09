@@ -13,6 +13,7 @@
                 {% endfor %}
             {% endif %}
         </div>
+        <h2 class="ml-5">Send Mail</h2>
         <div class="col-md-12">
             <form action="{% url 'admin-email' %}" method="post">
                 {% csrf_token %}

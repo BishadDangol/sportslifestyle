@@ -518,7 +518,7 @@ def custom_mail(request):
             try:
                 email = request.POST.get('email')
                 Newsletter.objects.create(email=email)
-                messages.success(request, "Thank you for your message")
+                messages.success(request, "Thanks for subscribing to our platform")
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             return redirect(request.META.get('HTTP_REFERER'))
@@ -613,7 +613,17 @@ def admin_logout(request):
 
 @login_required(login_url='admin-login')
 def admin_panel(request):
-    return render(request, 'admin-panel/index.html')
+    total_products = Product.objects.count()
+    total_category = Category.objects.count()
+    total_users = User.objects.count()
+    total_orders = Order.objects.count()
+    data = {
+        'totalOrders': total_orders,  # for total orders
+        'totalUsers': total_users,  # for total users
+        'totalCategory': total_category,  # for total category
+        'totalProducts': total_products,  # for total products
+    }
+    return render(request, 'admin-panel/index.html', data)
 
 
 def add_product(request):
@@ -673,9 +683,23 @@ def admin_product_delete(request, id):
 
 def admin_product_list(request):
     data = {
-        'adminProductData': Product.objects.all()
+        'adminProductData': Product.objects.order_by('-id')
     }
     return render(request, 'admin-panel/product-list.html', data)
+
+
+def admin_user_list(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        if user_id:
+            user = User.objects.get(id=user_id)
+            user.delete()
+            # Redirect to user list page after deleting the user
+            return redirect('admin-user-list')
+    data = {
+        'adminUserData': User.objects.all()
+    }
+    return render(request, 'admin-panel/user-list.html', data)
 
 
 def admin_order_list(request):
@@ -686,7 +710,7 @@ def admin_order_list(request):
         return redirect('admin-order-list')
     else:
         data = {
-            'ordersData': Order.objects.all()
+            'ordersData': Order.objects.order_by('-id')
         }
         return render(request, 'admin-panel/order.html', data)
 

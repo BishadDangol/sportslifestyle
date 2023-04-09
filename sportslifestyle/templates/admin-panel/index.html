@@ -6,44 +6,44 @@
 
             <div class="card-detail">
                 <div class="card-inner">
-                    <p>Total desk</p>
+                    <p>Total Products</p>
                 </div>
-                <span class="text-primay font-weight-bold">249</span>
-                <span class="tex font-weight-light">seats</span>
+                <span class="text-primay font-weight-bold">{{ totalProducts }}</span>
+                <span class="tex font-weight-light">Products</span>
             </div>
 
             <div class="card-detail">
                 <div class="card-inner">
-                    <p class="text-prmary">Available desk</p>
-                    <img class="size" src="up.png" alt="a">
+                    <p class="text-prmary">Total Categorys</p>
+
                 </div>
-                <span class="text-prim font-weight-bold">83</span>
-                <span class="tex font-weight-light">seats</span>
+                <span class="text-prim font-weight-bold">{{ totalCategory }}</span>
+                <span class="tex font-weight-light">Category</span>
             </div>
 
             <div class="card-detail">
                 <div class="card-inner">
-                    <p class="text-prmary">Booked desk</p>
-                    <img class="size" src="up.png" alt="a">
+                    <p class="text-prmary">Total Users</p>
+
                 </div>
-                <span class="text-primry font-weight-bold">79</span>
-                <span class="tex font-weight-light">seats</span>
+                <span class="text-primry font-weight-bold">{{ totalUsers }}</span>
+                <span class="tex font-weight-light">Users</span>
             </div>
 
             <div class="card-detail">
                 <div class="card-inner">
-                    <p class="text-priary">Cancelled desk</p>
-                    <img class="size" src="down.png" alt="a">
+                    <p class="text-priary">Total Orders</p>
+
                 </div>
-                <span class="text-primry font-weight-bold">56</span>
-                <span class="tex font-weight-light">employees</span>
+                <span class="text-primry font-weight-bold">{{ totalOrders }}</span>
+                <span class="tex font-weight-light">Orders</span>
             </div>
 
         </div>
 
         <div class="barchart">
             <div class="charts-card">
-                <p class="chart-title">Booking Statistics</p>
+                <p class="chart-title">Shop Statistics</p>
                 <div id="bar-chart"></div>
             </div>
         </div>

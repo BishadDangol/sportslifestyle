@@ -2,54 +2,52 @@
 <aside id="sidebar">
     <div class="sidebar-title">
         <div class="brand-name">
-            <p>Sports Panel</p>
+            <p>Admin Panel</p>
         </div>
         <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
     </div>
 
     <ul class="sidebar-list">
-        <div class="profile">
 
-            <h4>
-                {% if user.is_authenticated %}
-                    {{ user.username }}
-                {% endif %}
-            </h4>
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'admin-panel' %}';">
+            <span class="material-icons-outlined">dashboard</span> Dashboard
+        </li>
 
-        </div>
-        <a href="{% url 'admin-panel' %}">
-            <li class="sidebar-list-item">
-                <span class="material-icons-outlined">dashboard</span> Dashboard
-            </li>
-        </a>
-        <a href="{% url 'add-product' %}">
-            <li class="sidebar-list-item">
+
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'add-product' %}';">
                     <span class="material-icons-outlined">
-                        leaderboard
+                        store
                         </span> Products
-            </li>
-        </a>
-        <a href="{% url 'admin-product-list' %}">
-            <li class="sidebar-list-item">
+        </li>
+
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'admin-user-list' %}';">
                     <span class="material-icons-outlined">
-                        badge
+                        person
+                        </span> User
+        </li>
+
+
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'admin-product-list' %}';">
+                    <span class="material-icons-outlined">
+                        list_alt
                         </span> List Products
-            </li>
-        </a>
-        <a href="{% url 'admin-order-list' %}">
-            <li class="sidebar-list-item">
+        </li>
+
+
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'admin-order-list' %}';">
                     <span class="material-icons-outlined">
-                        calendar_month
+                        shopping_cart
                         </span> Orders
-            </li>
-        </a>
-        <a href="{% url 'admin-email' %}">
-            <li class="sidebar-list-item">
+        </li>
+
+
+        <li class="sidebar-list-item" onclick="window.location.href='{% url 'admin-email' %}';">
                     <span class="material-icons-outlined">
-                        calendar_month
+                        email
                         </span> Send Mail
-            </li>
-        </a>
+        </li>
+
+
     </ul>
 </aside>
 <!-- End Sidebar -->

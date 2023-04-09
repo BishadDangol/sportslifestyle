@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #b9c3dd;
+    background-color: #F8FAFB;
     color: #666666;
     font-family: "Poppins";
 }
@@ -50,7 +50,10 @@ body {
 }
 
 .profile {
-    text-align: center;
+    margin-left: 34px;
+    font-size: large;
+    margin-bottom: 12px;
+
 }
 
 .imgprofile {
