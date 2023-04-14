@@ -1,6 +1,6 @@
 import csv
 import uuid
-
+import re
 from django.contrib.sites import requests
 from django.core.mail import send_mail, BadHeaderError
 from django.shortcuts import render, redirect, get_object_or_404
@@ -27,6 +27,17 @@ def user_register(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         contact = request.POST.get('contact')
+
+        # Check if name field contains only alphabets
+        if not re.match("^[A-Za-z]+$", name):
+            messages.error(request, 'Name should only contain alphabets')
+            return redirect('register')
+
+        # Check if email address is valid
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            messages.error(request, 'Invalid email address')
+            return redirect('register')
+
         # check if user entered has existing username
         if User.objects.filter(username=name).exists():
             messages.error(request, 'Username already exists')
@@ -37,8 +48,9 @@ def user_register(request):
         if Customer.objects.filter(contact=contact).exists():
             messages.error(request, 'Phone number already exists')
             return redirect('register')
-        if len(contact) != 10:
-            messages.error(request, 'Phone number must have 10 digits')
+        # Check if contact number contains only numeric values and has 10 digits
+        if not re.match("^[0-9]{10}$", contact):
+            messages.error(request, 'Phone number should contain 10 digits and only numeric values')
             return redirect('register')
         user = User.objects.create_user(username=name, email=email, password=password)
         Customer.objects.create(user=user, contact=contact, )
