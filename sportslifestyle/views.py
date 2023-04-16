@@ -1,9 +1,13 @@
 import csv
 import uuid
 import re
+from typing import Union, Any
+
 from django.contrib.sites import requests
 from django.core.mail import send_mail, BadHeaderError
 from django.shortcuts import render, redirect, get_object_or_404
+from pandas import Series, DataFrame
+
 from .models import *
 from django.core.paginator import Paginator
 from django.urls import reverse
@@ -17,6 +21,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import requests
 from django.conf import settings
+
+import pandas as pd
+import numpy as np
+import scipy.stats
+import seaborn as sns
+
+# Similarity
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 # Create your views here.
@@ -440,15 +452,88 @@ def checkout(request):
 
 @login_required(login_url='login')
 def profile(request):
-    # Get the ID of the current user
     profile_id = request.user.id
-    data = {
-        # Retrieve all the Order objects associated with the Customer object
-        # corresponding to the current user
-        'ordersData': Order.objects.filter(customer=Customer.objects.get(user=profile_id)),
-        'title': 'Profile'
-    }
-    return render(request, 'pages/profile.html', data)
+    totalComments=Comment.objects.filter(user=profile_id).count()
+    if totalComments>0:
+        ratings = pd.read_csv('./ratings.csv')
+        movies = pd.read_csv('./products.csv')
+        df = pd.merge(ratings, movies, on='product_id', how='inner')
+        agg_ratings = df.groupby('product_id').agg(mean_rating=('rating', 'mean'),
+                                                   number_of_ratings=('rating', 'count')).reset_index()
+        agg_ratings_GT100: Union[Union[Series, DataFrame], Any] = agg_ratings[agg_ratings['number_of_ratings'] > 1]
+        agg_ratings_GT100.info()
+        agg_ratings_GT100.sort_values(by='number_of_ratings', ascending=False).head()
+        df_GT100 = pd.merge(df, agg_ratings_GT100[['product_id']], on='product_id', how='inner')
+        matrix = df_GT100.pivot_table(index='user_id', columns='product_id', values='rating')
+        matrix_norm = matrix.subtract(matrix.mean(axis=1), axis='rows')
+        user_similarity = matrix_norm.T.corr()
+        user_similarity_cosine = cosine_similarity(matrix_norm.fillna(0))
+        n = 2
+        user_similarity_threshold = 0.3
+        picked_userid = profile_id
+        user_similarity.drop(index=picked_userid, inplace=True)
+        similar_users = user_similarity[user_similarity[picked_userid] > user_similarity_threshold][
+                            picked_userid].sort_values(ascending=False)[:n]
+        picked_userid_watched = matrix_norm[matrix_norm.index == picked_userid].dropna(axis=1, how='all')
+        similar_user_movies = matrix_norm[matrix_norm.index.isin(similar_users.index)].dropna(axis=1, how='all')
+        similar_user_movies.drop(picked_userid_watched.columns, axis=1, inplace=True, errors='ignore')
+        item_score = {}
+        for i in similar_user_movies.columns:
+            # Get the ratings for movie i
+            movie_rating = similar_user_movies[i]
+            # Create a variable to store the score
+            total = 0
+            # Create a variable to store the number of scores
+            count = 0
+            # Loop through similar users
+            for u in similar_users.index:
+                # If the movie has rating
+                if pd.isna(movie_rating[u]) == False:
+                    # Score is the sum of user similarity score multiply by the movie rating
+                    score = similar_users[u] * movie_rating[u]
+                    # Add the score to the total score for the movie so far
+                    total += score
+                    # Add 1 to the count
+                    count += 1
+            # Get the average score for the item
+            item_score[i] = total / count
+
+        # Convert dictionary to pandas dataframe
+        item_score = pd.DataFrame(item_score.items(), columns=['product_id', 'rating'])
+
+        # Sort the movies by score
+        ranked_item_score = item_score.sort_values(by='product_id', ascending=False)
+
+        # Select top m movies
+        m = 8
+        all_product_id = ranked_item_score.head(m)
+        pid = []
+        for a in all_product_id['product_id']:
+            pid.append(a)
+        all_rec = Product.objects.filter(id__in=pid)
+        data = {
+            # Retrieve all the Order objects associated with the Customer object
+            # corresponding to the current user
+            'ordersData': Order.objects.filter(customer=Customer.objects.get(user=profile_id)),
+            'recommendations': all_rec,
+            'title': 'Profile'
+        }
+        return render(request, 'pages/profile.html', data)
+
+    else:
+        p_ratings = pd.read_csv('./ratings.csv')
+        p_ratings = p_ratings.dropna()
+        popular_products = pd.DataFrame(p_ratings.groupby('product_id')['rating'].count())
+        most_popular = popular_products.sort_values('rating', ascending=False)
+        all_product = Product.objects.filter(id__in=most_popular.index)
+        data = {
+                # Retrieve all the Order objects associated with the Customer object
+                # corresponding to the current user
+                'ordersData': Order.objects.filter(customer=Customer.objects.get(user=profile_id)),
+                'recommendations': all_product[0:4],
+                'title': 'Profile'
+            }
+        return render(request, 'pages/profile.html', data)
 
 
 def offer(request):
@@ -484,11 +569,12 @@ def ratings(request):
             comment_ojb.rating = rating
             comment_ojb.save()
             all_ratings = Comment.objects.all()
-            with open('ratings.csv', 'w') as f:
+            # write csv file
+            with open('ratings.csv', 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['id', 'user_id', 'product_id', 'rating'])
+                writer.writerow(['product_id', 'user_id', 'rating'])
                 for i in all_ratings:
-                    writer.writerow([i.id, i.user.id, i.product.id, i.rating])
+                    writer.writerow([i.product.id, i.user.id, i.rating])
             messages.success(request, "Comment was successfully updated")
             # Redirect the user back to the referring page with a success message.
             return redirect(request.META.get('HTTP_REFERER'))
@@ -504,11 +590,11 @@ def ratings(request):
         review.save()
         all_ratings = Comment.objects.all()
         # write csv file
-        with open('ratings.csv', 'w') as f:
+        with open('ratings.csv', 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['id', 'user_id', 'product_id', 'rating'])
+            writer.writerow(['product_id', 'user_id', 'rating'])
             for i in all_ratings:
-                writer.writerow([i.id, i.user.id, i.product.id, i.rating])
+                writer.writerow([i.product.id, i.user.id, i.rating])
         messages.success(request, "Comment was successfully added")
         # Redirect the user back to the referring page with a success message.
         return redirect(request.META.get('HTTP_REFERER'))
@@ -675,6 +761,12 @@ def add_product(request):
                     size=Size.objects.get(id=i),
                     quantity=quantity
                 )
+        all_prod = Product.objects.all()
+        with open('products.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['product_id', 'name'])
+            for i in all_prod:
+                writer.writerow([i.id, i.name])
 
         return redirect('admin-product-list')
 

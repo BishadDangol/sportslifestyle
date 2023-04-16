@@ -75,42 +75,19 @@
             <h4 class="text-left">Recommended for you</h4>
         </div>
         <div class="row mx-auto  container-fluid">
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <h4>Rs.5000</h4>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+            {% for rec in recommendations %}
+                <div class="product text-center col-lg-3 col-md-4 col-12">
+                    {% if rec.image %}
+                        <img class="img-fluid mb-3 pro-img" src="{{ rec.image.url }}" alt="">
+                    {% endif %}
+                    <div class="desc">
+                        <h5>{{ rec.name }}</h5>
+                        <h4>Rs.{{ rec.price }}</h4>
+                        <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
 
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <h4>Rs.5000</h4>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <h4>Rs.5000</h4>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product text-center col-lg-3 col-md-4 col-12">
-                <img class="img-fluid mb-3 pro-img" src="img/products/f1.jpg" alt="">
-                <div class="desc">
-                    <h5>Printed Shirt</h5>
-                    <h4>Rs.5000</h4>
-                    <button type="button" class="btn btn-primary buy-btn">Add to Cart</button>
-                </div>
-            </div>
 
         </div>
 
